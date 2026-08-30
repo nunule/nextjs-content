@@ -4,7 +4,7 @@ import path from "node:path"
 const imageKitApiEndpoint = "https://api.imagekit.io/v1/files"
 const defaultNovelPath = "/novels/"
 const defaultCacheSeconds = 60
-const supportedNovelExtension = ".txt"
+const supportedNovelExtensions = [".txt", ".md", ".mdx"] as const
 
 interface ImageKitAsset {
   fileId?: string
@@ -24,6 +24,7 @@ interface NovelSourceConfig {
 }
 
 interface Frontmatter {
+  chapterNumber?: string
   description?: string
   slug?: string
   status?: string
@@ -63,6 +64,17 @@ interface TextCacheEntry {
 interface CatalogCacheEntry {
   expiresAt: number
   novels: RemoteNovel[]
+}
+
+interface ReadableAsset {
+  asset: ImageKitAsset
+  text: string
+}
+
+interface ParsedChapter {
+  chapterNumber: number
+  content: string
+  title: string
 }
 
 const textCache = new Map<string, TextCacheEntry>()
@@ -112,7 +124,7 @@ async function listImageKitAssets(config: NovelSourceConfig) {
     const searchParams = new URLSearchParams({
       fileType: "non-image",
       limit: String(limit),
-      path: config.novelPath,
+      searchQuery: `path:"${config.novelPath}"`,
       skip: String(skip),
     })
     const response = await fetch(`${imageKitApiEndpoint}?${searchParams.toString()}`, {
@@ -149,7 +161,15 @@ function getAssetFileName(asset: ImageKitAsset) {
     asset.name || (asset.filePath ? path.posix.basename(asset.filePath) : ""),
   )
 
-  return name.toLowerCase().endsWith(supportedNovelExtension) ? name : null
+  return supportedNovelExtensions.some((extension) => name.toLowerCase().endsWith(extension))
+    ? name
+    : null
+}
+
+function stripNovelExtension(value: string) {
+  const extension = supportedNovelExtensions.find((item) => value.toLowerCase().endsWith(item))
+
+  return extension ? value.slice(0, -extension.length) : value
 }
 
 function getAssetKey(asset: ImageKitAsset) {
@@ -278,7 +298,13 @@ function parseFrontmatter(text: string) {
     const [, key, rawValue] = match
     const value = unquote(rawValue)
 
-    if (key === "title" || key === "description" || key === "status" || key === "slug") {
+    if (
+      key === "title" ||
+      key === "description" ||
+      key === "status" ||
+      key === "slug" ||
+      key === "chapterNumber"
+    ) {
       frontmatter[key] = value
     }
   }
@@ -390,11 +416,151 @@ function createChapterSlug(chapterNumber: number, title: string) {
 }
 
 function createNovelSlug(value: string) {
-  return toSafePathSegment(value.replace(/\.txt$/i, ""))
+  return toSafePathSegment(stripNovelExtension(value))
 }
 
 function createChapterPath(novelSlug: string, chapterSlug: string) {
   return `/novels/${encodeURIComponent(novelSlug)}/chapters/${encodeURIComponent(chapterSlug)}`
+}
+
+function createRemoteChapter(novelSlug: string, chapter: ParsedChapter): RemoteChapter {
+  const chapterSlug = createChapterSlug(chapter.chapterNumber, chapter.title)
+  const chapterPath = createChapterPath(novelSlug, chapterSlug)
+
+  return {
+    chapterNumber: chapter.chapterNumber,
+    content: chapter.content,
+    downloadPath: `/api${chapterPath}/download`,
+    path: chapterPath,
+    slug: chapterSlug,
+    title: chapter.title,
+  }
+}
+
+function parseChapterNumber(value?: string) {
+  if (!value) {
+    return null
+  }
+
+  const normalized = normalizeDigits(value.trim())
+
+  if (!/^[0-9零〇一二三四五六七八九十百千万两]+$/.test(normalized)) {
+    return null
+  }
+
+  const chapterNumber = chineseNumberToArabic(normalized)
+
+  return Number.isFinite(chapterNumber) && chapterNumber > 0 ? chapterNumber : null
+}
+
+function parseChapterFileName(fileName: string) {
+  const baseName = stripNovelExtension(fileName)
+  const heading = parseChapterHeading(baseName)
+
+  if (heading) {
+    return heading
+  }
+
+  const match = baseName.match(/^([0-9０-９]+)[_\-—.．、\s]+(.+)$/)
+
+  if (!match) {
+    return null
+  }
+
+  const chapterNumber = Number(normalizeDigits(match[1]))
+
+  return Number.isFinite(chapterNumber) && chapterNumber > 0
+    ? {
+        chapterNumber,
+        title: match[2].trim() || `第${chapterNumber}章`,
+      }
+    : null
+}
+
+function parseStandaloneChapter(text: string, asset: ImageKitAsset): ParsedChapter {
+  const fileName = getAssetFileName(asset) || "chapter.txt"
+  const { body, frontmatter } = parseFrontmatter(text)
+  const lines = body.replace(/\r/g, "").split("\n")
+  const firstContentLineIndex = lines.findIndex((line) => line.trim())
+  const firstHeading =
+    firstContentLineIndex >= 0 ? parseChapterHeading(lines[firstContentLineIndex]) : null
+  const fileNameHeading = parseChapterFileName(fileName)
+  const chapterNumber =
+    parseChapterNumber(frontmatter.chapterNumber) ??
+    firstHeading?.chapterNumber ??
+    fileNameHeading?.chapterNumber ??
+    1
+  const title = frontmatter.title || firstHeading?.title || fileNameHeading?.title || `第${chapterNumber}章`
+  const contentLines =
+    firstContentLineIndex >= 0 && firstHeading
+      ? lines.filter((_, index) => index !== firstContentLineIndex)
+      : lines
+
+  return {
+    chapterNumber,
+    content: contentLines.join("\n").trim(),
+    title,
+  }
+}
+
+function getAssetPathSegments(asset: ImageKitAsset, config: NovelSourceConfig) {
+  const rawPath = (asset.filePath || asset.name || "").replace(/\\/g, "/")
+  const normalizedPath = rawPath.replace(/^\/+/, "")
+  const novelPath = config.novelPath.replace(/^\/+|\/+$/g, "")
+
+  if (!novelPath) {
+    return normalizedPath.split("/").filter(Boolean)
+  }
+
+  const prefix = `${novelPath}/`
+
+  if (normalizedPath.startsWith(prefix)) {
+    return normalizedPath.slice(prefix.length).split("/").filter(Boolean)
+  }
+
+  return normalizedPath.split("/").filter(Boolean)
+}
+
+function getChapterOwnerSlug(asset: ImageKitAsset, config: NovelSourceConfig) {
+  const pathSegments = getAssetPathSegments(asset, config)
+
+  if (pathSegments.length < 3 || pathSegments[1].toLowerCase() !== "chapters") {
+    return null
+  }
+
+  return createNovelSlug(pathSegments[0])
+}
+
+function isNovelDocumentAsset(asset: ImageKitAsset, config: NovelSourceConfig) {
+  const pathSegments = getAssetPathSegments(asset, config)
+
+  return pathSegments.length === 1 || pathSegments[1]?.toLowerCase() !== "chapters"
+}
+
+function createFallbackNovel(novelSlug: string, folderName: string): RemoteNovel {
+  return {
+    chapters: [],
+    slug: novelSlug,
+    sourceFileName: folderName,
+    status: "连载中",
+    summary: "",
+    title: folderName,
+  }
+}
+
+function addChapterToNovel(novel: RemoteNovel, chapter: ParsedChapter) {
+  const remoteChapter = createRemoteChapter(novel.slug, chapter)
+  const existingIndex = novel.chapters.findIndex(
+    (item) => item.chapterNumber === remoteChapter.chapterNumber,
+  )
+
+  if (existingIndex >= 0) {
+    novel.chapters[existingIndex] = remoteChapter
+  } else {
+    novel.chapters.push(remoteChapter)
+  }
+
+  novel.chapters.sort((left, right) => left.chapterNumber - right.chapterNumber)
 }
 
 function parseNovel(text: string, asset: ImageKitAsset): RemoteNovel {
@@ -449,19 +615,7 @@ function parseNovel(text: string, asset: ImageKitAsset): RemoteNovel {
 
   chapters.sort((left, right) => left.chapterNumber - right.chapterNumber)
 
-  const remoteChapters = chapters.map((chapter) => {
-    const chapterSlug = createChapterSlug(chapter.chapterNumber, chapter.title)
-    const chapterPath = createChapterPath(slug, chapterSlug)
-
-    return {
-      chapterNumber: chapter.chapterNumber,
-      content: chapter.content,
-      downloadPath: `/api${chapterPath}/download`,
-      path: chapterPath,
-      slug: chapterSlug,
-      title: chapter.title,
-    }
-  })
+  const remoteChapters = chapters.map((chapter) => createRemoteChapter(slug, chapter))
 
   return {
     description: frontmatter.description,
@@ -470,7 +624,7 @@ function parseNovel(text: string, asset: ImageKitAsset): RemoteNovel {
     sourceFileName: fileName,
     status: frontmatter.status === "已完结" ? "已完结" : "连载中",
     summary: summaryLines.join("\n").trim(),
-    title: frontmatter.title || fileName.replace(/\.txt$/i, ""),
+    title: frontmatter.title || stripNovelExtension(fileName),
   }
 }
 
@@ -488,10 +642,13 @@ export async function getNovelCatalog(): Promise<NovelCatalogResult> {
   try {
     const assets = await listImageKitAssets(config)
     const novelAssets = assets.filter((asset) => asset.type !== "folder" && getAssetFileName(asset))
-    const parsedNovels = await Promise.allSettled(
-      novelAssets.map(async (asset) => parseNovel(await downloadAssetText(asset, config), asset)),
+    const parsedAssets = await Promise.allSettled(
+      novelAssets.map(async (asset): Promise<ReadableAsset> => ({
+        asset,
+        text: await downloadAssetText(asset, config),
+      })),
     )
-    const novels = parsedNovels.flatMap((result) => {
+    const readableAssets = parsedAssets.flatMap((result) => {
       if (result.status === "fulfilled") {
         return [result.value]
       }
@@ -499,6 +656,57 @@ export async function getNovelCatalog(): Promise<NovelCatalogResult> {
       console.error("跳过无法读取的 ImageKit 小说文件", result.reason)
       return []
     })
+
+    const novelsBySlug = new Map<string, RemoteNovel>()
+    const novelSlugAliases = new Map<string, string>()
+
+    for (const readableAsset of readableAssets) {
+      if (!isNovelDocumentAsset(readableAsset.asset, config)) {
+        continue
+      }
+
+      const novel = parseNovel(readableAsset.text, readableAsset.asset)
+      const existingNovel = novelsBySlug.get(novel.slug)
+
+      if (existingNovel) {
+        existingNovel.chapters.push(...novel.chapters)
+        existingNovel.chapters.sort((left, right) => left.chapterNumber - right.chapterNumber)
+      } else {
+        novelsBySlug.set(novel.slug, novel)
+      }
+
+      const pathSegments = getAssetPathSegments(readableAsset.asset, config)
+
+      if (pathSegments[0]) {
+        novelSlugAliases.set(createNovelSlug(pathSegments[0]), novel.slug)
+      }
+    }
+
+    for (const readableAsset of readableAssets) {
+      const ownerSlug = getChapterOwnerSlug(readableAsset.asset, config)
+
+      if (!ownerSlug) {
+        continue
+      }
+
+      const mappedSlug = novelSlugAliases.get(ownerSlug) || ownerSlug
+      let novel = novelsBySlug.get(mappedSlug)
+
+      if (!novel) {
+        const pathSegments = getAssetPathSegments(readableAsset.asset, config)
+        const folderName = pathSegments[0] || ownerSlug
+        novel = createFallbackNovel(ownerSlug, folderName)
+        novelsBySlug.set(ownerSlug, novel)
+      }
+
+      if (novel.chapters.length === 1 && novel.chapters[0].title === "正文") {
+        novel.chapters = []
+      }
+
+      addChapterToNovel(novel, parseStandaloneChapter(readableAsset.text, readableAsset.asset))
+    }
+
+    const novels = Array.from(novelsBySlug.values())
 
     novels.sort((left, right) => left.title.localeCompare(right.title, "zh-CN"))
     catalogCache = {

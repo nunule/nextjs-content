@@ -42,7 +42,7 @@ export default async function Home() {
         </p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight">暂无小说</h1>
         <p className="mt-4 text-slate-600 dark:text-slate-300">
-          请将 TXT 小说上传到 ImageKit 的小说目录。
+          请将 TXT、MD 或 MDX 小说文件上传到 ImageKit 的小说目录。
         </p>
       </section>
     )

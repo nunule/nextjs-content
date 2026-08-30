@@ -25,7 +25,7 @@ IMAGEKIT_SIGNED_FILES=true
 IMAGEKIT_CACHE_SECONDS=60
 ```
 
-将每部小说以一个 UTF-8 TXT 文件上传到 ImageKit 的 `/novels/` 目录。文件可以使用以下格式：
+将每部小说以一个 UTF-8 TXT、MD 或 MDX 文件上传到 ImageKit 的 `/novels/` 目录。网站支持两种组织方式：一个文件包含整部小说，或沿用原有的“小说文件 + `chapters` 子目录”结构。文件可以使用以下格式：
 
 ```text
 ---
@@ -41,7 +41,7 @@ status: 连载中
 第一章正文……
 ```
 
-网站会自动读取目录中的 TXT 文件、拆分章节并生成小说目录。新增小说只需要上传新的 TXT 文件，不需要修改代码或重新提交小说内容。
+网站会自动读取目录中的 TXT、MD、MDX 文件，拆分章节并生成小说目录。新增小说只需要上传新的文件，不需要修改代码或重新提交小说内容。远程 MD/MDX 按安全的纯文本规则解析，不会执行其中的 JSX 组件。
 
 完整格式规则请参考 [NOVEL_CONTENT_RULES.md](./NOVEL_CONTENT_RULES.md)。
 

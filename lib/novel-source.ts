@@ -563,9 +563,14 @@ function addChapterToNovel(novel: RemoteNovel, chapter: ParsedChapter) {
   novel.chapters.sort((left, right) => left.chapterNumber - right.chapterNumber)
 }
 
-function parseNovel(text: string, asset: ImageKitAsset): RemoteNovel {
+function parseNovel(
+  text: string,
+  asset: ImageKitAsset,
+  options: { fallbackBodyAsChapter?: boolean } = {},
+): RemoteNovel {
   const fileName = getAssetFileName(asset) || "novel.txt"
   const { body, frontmatter } = parseFrontmatter(text)
+  const fallbackBodyAsChapter = options.fallbackBodyAsChapter ?? true
   const slug = createNovelSlug(frontmatter.slug || fileName)
   const lines = body.replace(/\r/g, "").split("\n")
   const summaryLines: string[] = []
@@ -604,7 +609,7 @@ function parseNovel(text: string, asset: ImageKitAsset): RemoteNovel {
     })
   }
 
-  if (chapters.length === 0 && body.trim()) {
+  if (chapters.length === 0 && body.trim() && fallbackBodyAsChapter) {
     chapters.push({
       chapterNumber: 1,
       content: body.trim(),
@@ -659,13 +664,22 @@ export async function getNovelCatalog(): Promise<NovelCatalogResult> {
 
     const novelsBySlug = new Map<string, RemoteNovel>()
     const novelSlugAliases = new Map<string, string>()
+    const chapterOwnerSlugs = new Set(
+      novelAssets
+        .map((asset) => getChapterOwnerSlug(asset, config))
+        .filter((slug): slug is string => Boolean(slug)),
+    )
 
     for (const readableAsset of readableAssets) {
       if (!isNovelDocumentAsset(readableAsset.asset, config)) {
         continue
       }
 
-      const novel = parseNovel(readableAsset.text, readableAsset.asset)
+      const pathSegments = getAssetPathSegments(readableAsset.asset, config)
+      const folderSlug = pathSegments[0] ? createNovelSlug(pathSegments[0]) : null
+      const novel = parseNovel(readableAsset.text, readableAsset.asset, {
+        fallbackBodyAsChapter: !folderSlug || !chapterOwnerSlugs.has(folderSlug),
+      })
       const existingNovel = novelsBySlug.get(novel.slug)
 
       if (existingNovel) {
@@ -674,8 +688,6 @@ export async function getNovelCatalog(): Promise<NovelCatalogResult> {
       } else {
         novelsBySlug.set(novel.slug, novel)
       }
-
-      const pathSegments = getAssetPathSegments(readableAsset.asset, config)
 
       if (pathSegments[0]) {
         novelSlugAliases.set(createNovelSlug(pathSegments[0]), novel.slug)

@@ -1,10 +1,10 @@
-import { Metadata } from "next"
+import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
-import { allChapters, allNovels } from "contentlayer/generated"
-import { Mdx } from "@/components/mdx-components"
+import { PlainTextContent } from "@/components/plain-text-content"
 import { ReadingContent } from "@/components/reading-content"
+import { getNovelBySlug } from "@/lib/novel-source"
 
 interface ChapterPageProps {
   params: {
@@ -21,29 +21,22 @@ function decodeRouteParam(value: string) {
   }
 }
 
-function getChapterFromParams(params: ChapterPageProps["params"]) {
-  const chapter = allChapters.find(
-    (item) =>
-      item.novelSlug === decodeRouteParam(params.novelSlug) &&
-      item.chapterSlug === decodeRouteParam(params.chapterSlug)
-  )
-  const novel = allNovels.find(
-    (item) => item.slugAsParams === decodeRouteParam(params.novelSlug)
+async function getChapterFromParams(params: ChapterPageProps["params"]) {
+  const novel = await getNovelBySlug(params.novelSlug)
+  const chapter = novel?.chapters.find(
+    (item) => item.slug === decodeRouteParam(params.chapterSlug),
   )
 
   return { chapter, novel }
 }
 
-function getNovelChapters(novelSlug: string) {
-  return allChapters
-    .filter((chapter) => chapter.novelSlug === novelSlug)
-    .sort((a, b) => a.chapterNumber - b.chapterNumber)
-}
+export const dynamic = "force-dynamic"
+export const dynamicParams = true
 
 export async function generateMetadata({
   params,
 }: ChapterPageProps): Promise<Metadata> {
-  const { chapter, novel } = getChapterFromParams(params)
+  const { chapter, novel } = await getChapterFromParams(params)
 
   if (!chapter || !novel) {
     return {}
@@ -55,26 +48,16 @@ export async function generateMetadata({
   }
 }
 
-export async function generateStaticParams(): Promise<
-  ChapterPageProps["params"][]
-> {
-  return allChapters.map((chapter) => ({
-    novelSlug: chapter.novelSlug,
-    chapterSlug: chapter.chapterSlug,
-  }))
-}
-
-export default function ChapterPage({ params }: ChapterPageProps) {
-  const { chapter, novel } = getChapterFromParams(params)
+export default async function ChapterPage({ params }: ChapterPageProps) {
+  const { chapter, novel } = await getChapterFromParams(params)
 
   if (!chapter || !novel) {
     notFound()
   }
 
-  const chapters = getNovelChapters(novel.slugAsParams)
-  const currentIndex = chapters.findIndex((item) => item._id === chapter._id)
-  const previousChapter = chapters[currentIndex - 1]
-  const nextChapter = chapters[currentIndex + 1]
+  const currentIndex = novel.chapters.findIndex((item) => item.slug === chapter.slug)
+  const previousChapter = novel.chapters[currentIndex - 1]
+  const nextChapter = novel.chapters[currentIndex + 1]
 
   return (
     <article className="py-8">
@@ -93,16 +76,23 @@ export default function ChapterPage({ params }: ChapterPageProps) {
         <h1 className="text-3xl font-semibold tracking-tight">
           第{chapter.chapterNumber}章：{chapter.title}
         </h1>
+        <a
+          href={chapter.downloadPath}
+          download
+          className="mt-5 inline-flex rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+        >
+          下载本章
+        </a>
       </header>
 
       <ReadingContent>
-        <Mdx code={chapter.body.code} />
+        <PlainTextContent content={chapter.content} />
       </ReadingContent>
 
       <nav className="mt-12 flex items-center justify-between border-t border-slate-200 pt-6 text-sm dark:border-slate-800">
         {previousChapter ? (
           <Link
-            href={previousChapter.slug}
+            href={previousChapter.path}
             className="text-slate-600 hover:underline dark:text-slate-300"
           >
             ← 上一章
@@ -117,7 +107,7 @@ export default function ChapterPage({ params }: ChapterPageProps) {
 
         {nextChapter ? (
           <Link
-            href={nextChapter.slug}
+            href={nextChapter.path}
             className="text-slate-600 hover:underline dark:text-slate-300"
           >
             下一章 →

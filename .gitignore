@@ -16,8 +16,12 @@ next-env.d.ts
 *.tsbuildinfo
 .DS_Store
 .env*
+!.env.example
 .vercel/
 coverage/
+
+# novels are hosted in ImageKit, not in the repository
+content/novels/
 
 # logs
 npm-debug.log*

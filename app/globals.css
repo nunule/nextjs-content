@@ -22,3 +22,20 @@ body {
   font-size: var(--novel-font-size, 18px);
   line-height: var(--novel-line-height, 1.8);
 }
+
+.novel-summary p,
+.novel-summary li {
+  line-height: 1.8;
+}
+
+.novel-summary p {
+  text-indent: 2em;
+}
+
+.novel-summary ul {
+  padding-left: 1.5rem;
+}
+
+.novel-summary li {
+  margin-top: 0.35rem;
+}

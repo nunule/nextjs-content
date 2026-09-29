@@ -50,14 +50,30 @@ export default async function Home() {
 
   return (
     <section className="py-8">
-      <header className="mb-8">
-        <p className="text-sm uppercase tracking-[0.25em] text-slate-500 dark:text-slate-400">
-          小说作品
-        </p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight">小说</h1>
-        <p className="mt-3 text-slate-600 dark:text-slate-300">
-          悬停小说标题查看简介，再展开章节目录开始阅读。
-        </p>
+      <header className="mb-8 flex items-end justify-between gap-4">
+        <div>
+          <p className="text-sm uppercase tracking-[0.25em] text-slate-500 dark:text-slate-400">
+            小说作品
+          </p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight">小说</h1>
+          <p className="mt-3 text-slate-600 dark:text-slate-300">
+            悬停小说标题查看简介，再展开章节目录开始阅读。
+          </p>
+        </div>
+        <a
+          href="/rss"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mb-1 flex items-center gap-1.5 text-sm font-medium text-orange-600 hover:text-orange-700 dark:text-orange-500 dark:hover:text-orange-400"
+          aria-label="RSS 订阅"
+        >
+          <svg xmlns="http://www.w3.org/2005/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M4 11a9 9 0 0 1 9 9"/>
+            <path d="M4 4a16 16 0 0 1 16 16"/>
+            <circle cx="5" cy="19" r="1"/>
+          </svg>
+          RSS
+        </a>
       </header>
 
       <div className="space-y-5">
@@ -100,9 +116,25 @@ export default async function Home() {
                     )}
                   </div>
                 </div>
-                <span className="shrink-0 rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300">
-                  {novel.status}
-                </span>
+                <div className="flex items-center gap-3">
+                  <a
+                    href={`/novels/${novel.slug}/rss`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-orange-500 hover:text-orange-600 dark:text-orange-400 dark:hover:text-orange-300"
+                    aria-label={`订阅 ${novel.title}`}
+                    title={`订阅 ${novel.title}`}
+                  >
+                    <svg xmlns="http://www.w3.org/2005/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M4 11a9 9 0 0 1 9 9"/>
+                      <path d="M4 4a16 16 0 0 1 16 16"/>
+                      <circle cx="5" cy="19" r="1"/>
+                    </svg>
+                  </a>
+                  <span className="shrink-0 rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                    {novel.status}
+                  </span>
+                </div>
               </div>
             </div>
 

@@ -1,26 +1,18 @@
-import { createHmac } from "node:crypto"
 import path from "node:path"
+import {
+  getImageKitConfig,
+  getImageKitAssetUrl,
+  listImageKitFiles,
+  normalizeImageKitPath,
+  signImageKitUrl,
+} from "@/lib/imagekit"
+import type { ImageKitAsset, ImageKitConfig } from "@/lib/imagekit"
 
-const imageKitApiEndpoint = "https://api.imagekit.io/v1/files"
 const defaultNovelPath = "/novels/"
-const defaultCacheSeconds = 60
 const supportedNovelExtensions = [".txt", ".md", ".mdx"] as const
 
-interface ImageKitAsset {
-  fileId?: string
-  filePath?: string
-  isPrivateFile?: boolean
-  name?: string
-  type?: string
-  url?: string
-}
-
-interface NovelSourceConfig {
-  apiKey: string
-  cacheSeconds: number
+interface NovelSourceConfig extends ImageKitConfig {
   novelPath: string
-  signedFiles: boolean
-  urlEndpoint: string
 }
 
 interface Frontmatter {
@@ -81,24 +73,11 @@ const textCache = new Map<string, TextCacheEntry>()
 let catalogCache: CatalogCacheEntry | null = null
 
 function getConfig(): NovelSourceConfig | null {
-  const apiKey = process.env.IMAGEKIT_PRIVATE_KEY?.trim()
-  const urlEndpoint = process.env.IMAGEKIT_URL_ENDPOINT?.trim()
-
-  if (!apiKey || !urlEndpoint) {
-    return null
-  }
-
-  const parsedCacheSeconds = Number(process.env.IMAGEKIT_CACHE_SECONDS)
-
+  const config = getImageKitConfig()
+  if (!config) return null
   return {
-    apiKey,
-    cacheSeconds:
-      Number.isFinite(parsedCacheSeconds) && parsedCacheSeconds >= 0
-        ? parsedCacheSeconds
-        : defaultCacheSeconds,
-    novelPath: normalizeFolderPath(process.env.IMAGEKIT_NOVEL_PATH || defaultNovelPath),
-    signedFiles: process.env.IMAGEKIT_SIGNED_FILES !== "false",
-    urlEndpoint: urlEndpoint.replace(/\/+$/, ""),
+    ...config,
+    novelPath: normalizeImageKitPath(process.env.IMAGEKIT_NOVEL_PATH || defaultNovelPath),
   }
 }
 
@@ -106,54 +85,8 @@ export function isNovelSourceConfigured() {
   return getConfig() !== null
 }
 
-function normalizeFolderPath(folderPath: string) {
-  const normalized = `/${folderPath.replace(/^\/+|\/+$/g, "")}/`
-  return normalized === "//" ? "/" : normalized
-}
-
-function getAuthorizationHeader(apiKey: string) {
-  return `Basic ${Buffer.from(`${apiKey}:`).toString("base64")}`
-}
-
 async function listImageKitAssets(config: NovelSourceConfig) {
-  const assets: ImageKitAsset[] = []
-  const limit = 1000
-  let skip = 0
-
-  while (true) {
-    const searchParams = new URLSearchParams({
-      fileType: "non-image",
-      limit: String(limit),
-      searchQuery: `path:"${config.novelPath}"`,
-      skip: String(skip),
-    })
-    const response = await fetch(`${imageKitApiEndpoint}?${searchParams.toString()}`, {
-      headers: {
-        Authorization: getAuthorizationHeader(config.apiKey),
-      },
-      cache: "no-store",
-    })
-
-    if (!response.ok) {
-      throw new Error(`ImageKit 文件列表请求失败（${response.status}）`)
-    }
-
-    const page = (await response.json()) as unknown
-
-    if (!Array.isArray(page)) {
-      throw new Error("ImageKit 文件列表返回格式不正确")
-    }
-
-    assets.push(...(page as ImageKitAsset[]))
-
-    if (page.length < limit) {
-      break
-    }
-
-    skip += page.length
-  }
-
-  return assets
+  return listImageKitFiles(config, config.novelPath)
 }
 
 function getAssetFileName(asset: ImageKitAsset) {
@@ -177,45 +110,11 @@ function getAssetKey(asset: ImageKitAsset) {
 }
 
 function getAssetUrl(asset: ImageKitAsset, config: NovelSourceConfig) {
-  if (asset.url) {
-    return asset.url
-  }
-
-  if (!asset.filePath) {
-    throw new Error("ImageKit 文件缺少访问地址")
-  }
-
-  return `${config.urlEndpoint}/${asset.filePath.replace(/^\/+/, "")}`
+  return getImageKitAssetUrl(asset, config)
 }
 
 function getSignedAssetUrl(assetUrl: string, config: NovelSourceConfig) {
-  if (!config.signedFiles) {
-    return assetUrl
-  }
-
-  const url = new URL(assetUrl)
-  const endpoint = new URL(config.urlEndpoint)
-  const endpointPath = endpoint.pathname.replace(/\/+$/, "")
-  const relativePath =
-    endpointPath && url.pathname.startsWith(endpointPath)
-      ? url.pathname.slice(endpointPath.length) || "/"
-      : url.pathname
-  const existingQuery = new URLSearchParams(url.searchParams)
-
-  existingQuery.delete("ik-s")
-  existingQuery.delete("ik-t")
-
-  const queryString = existingQuery.toString()
-  const pathToSign = `${relativePath}${queryString ? `?${queryString}` : ""}`
-  const expiresAt = Math.floor(Date.now() / 1000) + 300
-  const signature = createHmac("sha1", config.apiKey)
-    .update(`${pathToSign}${expiresAt}`)
-    .digest("hex")
-
-  url.searchParams.set("ik-t", String(expiresAt))
-  url.searchParams.set("ik-s", signature)
-
-  return url.toString()
+  return signImageKitUrl(assetUrl, config)
 }
 
 function decodeText(buffer: ArrayBuffer) {

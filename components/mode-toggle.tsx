@@ -1,42 +1,75 @@
 "use client"
 
 import { useTheme } from "next-themes"
+import { useEffect, useState } from "react"
 
 export function ModeToggle() {
-  const { setTheme, theme } = useTheme()
+  const { setTheme, resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return (
+      <button
+        type="button"
+        className="relative flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200/80 bg-white/70 text-slate-600 shadow-sm backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/70 dark:text-slate-300"
+        aria-label="切换主题"
+      >
+        <svg
+          xmlns="http://www.w3.org/2005/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-4 w-4 text-slate-400"
+        >
+          <circle cx="12" cy="12" r="5" />
+        </svg>
+      </button>
+    )
+  }
+
+  const isDark = resolvedTheme === "dark"
 
   return (
     <button
-      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-      className="border rounded-md w-6 h-6 flex items-center justify-center">
-      <span className="sr-only">Toggle mode</span>
-      {theme !== "dark" ? (
+      type="button"
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      className="relative flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200/80 bg-white/70 text-slate-600 shadow-sm backdrop-blur-sm transition-all hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 dark:border-slate-800 dark:bg-slate-900/70 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:bg-slate-800 dark:hover:text-white"
+      aria-label={isDark ? "切换为明亮模式" : "切换为暗色模式"}
+      title={isDark ? "明亮模式" : "暗色模式"}
+    >
+      {isDark ? (
         <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
+          xmlns="http://www.w3.org/2005/svg"
           viewBox="0 0 24 24"
-          strokeWidth={1.5}
+          fill="none"
           stroke="currentColor"
-          className="w-4 h-4">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"
-          />
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-4 w-4 text-amber-300"
+        >
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
         </svg>
       ) : (
         <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
+          xmlns="http://www.w3.org/2005/svg"
           viewBox="0 0 24 24"
-          strokeWidth={1.5}
+          fill="none"
           stroke="currentColor"
-          className="w-4 h-4">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
-          />
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-4 w-4 text-slate-700"
+        >
+          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
         </svg>
       )}
     </button>

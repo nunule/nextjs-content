@@ -63,7 +63,7 @@ export default async function ChapterPage({ params }: ChapterPageProps) {
     <article className="py-8">
       <div className="mb-8 text-sm text-slate-500 dark:text-slate-400">
         <Link href="/" className="hover:text-slate-900 dark:hover:text-white">
-          ← 返回小说列表
+          ← 返回作品列表
         </Link>
         <span className="mx-2">/</span>
         <span>{novel.title}</span>

@@ -4,6 +4,7 @@ import {
   normalizeImageKitPath,
 } from "@/lib/imagekit"
 import type { ImageKitAsset, ImageKitConfig } from "@/lib/imagekit"
+import { compareAudioDates } from "@/lib/audio-date"
 
 export interface AudioTrack {
   id: string
@@ -56,7 +57,7 @@ async function getMediaEntries(config: ImageKitConfig) {
     })
   }
   entries.sort((a, b) =>
-    b.track.date.localeCompare(a.track.date, "en", { numeric: true }) ||
+    compareAudioDates(a.track.date, b.track.date) ||
     a.track.order - b.track.order ||
     a.track.fileName.localeCompare(b.track.fileName, "zh-CN", { numeric: true }),
   )

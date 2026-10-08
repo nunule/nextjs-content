@@ -1,3 +1,4 @@
+import { Text } from "@/components/locale-provider"
 import type { Metadata } from "next"
 import { NavigationLink } from "@/components/navigation-link"
 import { notFound } from "next/navigation"
@@ -67,7 +68,7 @@ export default async function ChapterPage({ params }: ChapterPageProps) {
       {warning && <CatalogNotice message={warning} warning />}
       <div className="mb-8 text-sm text-slate-500 dark:text-slate-400">
         <NavigationLink href="/novels" className="hover:text-slate-900 dark:hover:text-white">
-          ← 返回作品列表
+          <Text id="novel.back" />
         </NavigationLink>
         <span className="mx-2">/</span>
         <span>{novel.title}</span>
@@ -78,7 +79,7 @@ export default async function ChapterPage({ params }: ChapterPageProps) {
           {novel.title}
         </p>
         <h1 className="text-2xl font-semibold leading-snug tracking-tight sm:text-3xl">
-          第{chapter.chapterNumber}章：{chapter.title}
+          <Text id="novel.chapter" values={{ number: chapter.chapterNumber, title: chapter.title }} />
         </h1>
       </header>
 
@@ -92,14 +93,14 @@ export default async function ChapterPage({ params }: ChapterPageProps) {
             href={previousChapter.path}
             className="text-slate-600 hover:underline dark:text-slate-300"
           >
-            ← 上一章
+            <Text id="novel.previous" />
           </NavigationLink>
         ) : (
           <span />
         )}
 
         <NavigationLink href="/novels" className="text-slate-600 hover:underline dark:text-slate-300">
-          返回目录
+          <Text id="novel.contents" />
         </NavigationLink>
 
         {nextChapter ? (
@@ -107,7 +108,7 @@ export default async function ChapterPage({ params }: ChapterPageProps) {
             href={nextChapter.path}
             className="text-slate-600 hover:underline dark:text-slate-300"
           >
-            下一章 →
+            <Text id="novel.next" />
           </NavigationLink>
         ) : (
           <span />

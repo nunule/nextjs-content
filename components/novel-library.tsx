@@ -1,3 +1,5 @@
+import { RssLink } from "@/components/rss-link"
+import { Text } from "@/components/locale-provider"
 import { NavigationLink } from "@/components/navigation-link"
 import { Suspense } from "react"
 import { CatalogNotice } from "@/components/catalog-notice"
@@ -13,21 +15,20 @@ export function NovelLibrary() {
       <header className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-xs font-medium tracking-[0.25em] text-slate-500 dark:text-slate-400">
-            雪落山庄 · 藏书阁
+            <Text id="library.eyebrow" />
           </p>
           <h1 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-slate-50 font-serif">
-            作品辑录
+            <Text id="library.title" />
           </h1>
           <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-            落雪煮茶，闲翻百卷。点击作品可查梗概，展开目录即刻阅读。
+            <Text id="library.description" />
           </p>
         </div>
-        <a
+        <RssLink
           href="/rss"
           target="_blank"
           rel="noopener noreferrer"
           className="mb-1 flex shrink-0 items-center gap-1.5 rounded-lg border border-orange-200/80 bg-orange-50/50 px-2.5 py-1 text-xs font-medium text-orange-600 transition hover:bg-orange-100/70 dark:border-orange-900/40 dark:bg-orange-950/30 dark:text-orange-400 dark:hover:bg-orange-900/40"
-          aria-label="RSS 订阅"
         >
           <svg
             xmlns="http://www.w3.org/2005/svg"
@@ -44,11 +45,11 @@ export function NovelLibrary() {
             <path d="M4 4a16 16 0 0 1 16 16" />
             <circle cx="5" cy="19" r="1" />
           </svg>
-          <span>订阅 RSS</span>
-        </a>
+          <span><Text id="rss.subscribe" /></span>
+        </RssLink>
       </header>
 
-      <Suspense fallback={<PageLoading label="正在加载作品目录…" />}>
+      <Suspense fallback={<PageLoading labelKey="loading.novels" />}>
         {/* @ts-expect-error React 18.2.0 types do not yet support async server components. */}
         <NovelList />
       </Suspense>
@@ -59,7 +60,7 @@ export function NovelLibrary() {
 async function NovelList() {
   const catalog = await getNovelCatalog()
   if (!catalog.configured) {
-    return <p className="rounded-2xl border border-dashed border-slate-300 p-6 text-sm text-slate-600 dark:border-slate-700 dark:text-slate-300">作品尚未上架，请稍后再来。</p>
+    return <p className="rounded-2xl border border-dashed border-slate-300 p-6 text-sm text-slate-600 dark:border-slate-700 dark:text-slate-300"><Text id="library.unavailable" /></p>
   }
   if (catalog.error) {
     return <CatalogNotice message={catalog.error} />
@@ -67,7 +68,7 @@ async function NovelList() {
   return (
     <>
       {catalog.warning && <CatalogNotice message={catalog.warning} warning />}
-      {catalog.novels.length === 0 && <p className="rounded-2xl border border-slate-200 p-8 text-center text-sm text-slate-600 dark:border-slate-800 dark:text-slate-300">暂无收录作品，新上传的故事将在此陈列。</p>}
+      {catalog.novels.length === 0 && <p className="rounded-2xl border border-slate-200 p-8 text-center text-sm text-slate-600 dark:border-slate-800 dark:text-slate-300"><Text id="library.empty" /></p>}
       <div className="space-y-6">
         {catalog.novels.map((novel) => (
           <article
@@ -78,20 +79,20 @@ async function NovelList() {
               <div className="flex flex-col gap-3">
                 <div className="min-w-0 flex-1">
                   <Disclosure
-                    label={`查看${novel.title}简介`}
+                    labelKey="novel.showSummary" labelValues={{ title: novel.title }}
                     buttonClassName="rounded-lg py-1 text-slate-700 dark:text-slate-200"
                     title={<>
                       <span role="heading" aria-level={2} className="block font-serif text-xl font-bold tracking-tight text-slate-900 sm:text-2xl dark:text-white">{novel.title}</span>
-                      <span className="mt-1 block text-xs text-slate-500 dark:text-slate-400">作品简介</span>
+                      <span className="mt-1 block text-xs text-slate-500 dark:text-slate-400"><Text id="novel.introduction" /></span>
                     </>}
                   >
                     <div className="mt-4 border-t border-slate-200 pt-4 dark:border-slate-800">
                       <p className="text-xs font-medium tracking-[0.16em] text-slate-500 dark:text-slate-400">
-                        内容梗概
+                        <Text id="novel.summary" />
                       </p>
                       {novel.description && (
                         <p className="mt-1.5 text-xs text-slate-500 dark:text-slate-400">
-                          类型：{novel.description}
+                          <Text id="novel.genre" values={{ genre: novel.description }} />
                         </p>
                       )}
                       {novel.summary ? (
@@ -100,7 +101,7 @@ async function NovelList() {
                         </div>
                       ) : (
                         <p className="mt-3 text-sm leading-7 text-slate-500 dark:text-slate-400">
-                          暂未提供作品简介。
+                          <Text id="novel.noSummary" />
                         </p>
                       )}
                     </div>
@@ -108,15 +109,14 @@ async function NovelList() {
                 </div>
 
                 <div className="order-first flex items-center justify-between gap-2.5">
-                  <span className="font-mono text-xs tracking-widest text-slate-500 dark:text-slate-400">NOVEL</span>
+                  <span className="font-mono text-xs tracking-widest text-slate-500 dark:text-slate-400"><Text id="novel.label" /></span>
                   <div className="flex items-center gap-2.5">
-                  <a
+                  <RssLink
                     href={`/novels/${novel.slug}/rss`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex h-11 w-11 items-center justify-center rounded-lg text-orange-500 transition hover:bg-orange-50 dark:text-orange-400 dark:hover:bg-orange-950/40"
-                    aria-label={`订阅 ${novel.title}`}
-                    title={`订阅 ${novel.title}`}
+                    novelTitle={novel.title}
                   >
                     <svg
                       xmlns="http://www.w3.org/2005/svg"
@@ -133,7 +133,7 @@ async function NovelList() {
                       <path d="M4 4a16 16 0 0 1 16 16" />
                       <circle cx="5" cy="19" r="1" />
                     </svg>
-                  </a>
+                  </RssLink>
                   <span
                     className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ${
                       novel.status === "连载中"
@@ -141,7 +141,7 @@ async function NovelList() {
                         : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300"
                     }`}
                   >
-                    {novel.status}
+                    <Text id={novel.status === "连载中" ? "novel.ongoing" : "novel.completed"} />
                   </span>
                   </div>
                 </div>
@@ -151,7 +151,7 @@ async function NovelList() {
             <Disclosure
               className="border-t border-slate-100 dark:border-slate-800/80"
               buttonClassName="px-5 py-3.5 text-sm font-medium text-slate-700 hover:bg-slate-50/60 dark:text-slate-300 dark:hover:bg-slate-800/40 sm:px-6"
-              title={<span className="flex items-center justify-between gap-3"><span>章节目录</span><span className="text-xs text-slate-500 dark:text-slate-400">共 {novel.chapters.length} 章</span></span>}
+              title={<span className="flex items-center justify-between gap-3"><span><Text id="novel.chapters" /></span><span className="text-xs text-slate-500 dark:text-slate-400"><Text id="novel.chapterCount" values={{ count: novel.chapters.length }} /></span></span>}
             >
               <div className="border-t border-slate-100 bg-slate-50/40 px-5 py-4 dark:border-slate-800/60 dark:bg-slate-950/30 sm:px-6">
                 <ol className="divide-y divide-slate-100/70 dark:divide-slate-800/40 text-sm">
@@ -162,10 +162,10 @@ async function NovelList() {
                         className="group/link flex min-h-[44px] items-center justify-between gap-3 text-slate-700 transition hover:text-slate-950 dark:text-slate-300 dark:hover:text-white"
                       >
                         <span className="min-w-0 break-words">
-                          第{chapter.chapterNumber}章：{chapter.title}
+                          <Text id="novel.chapter" values={{ number: chapter.chapterNumber, title: chapter.title }} />
                         </span>
                         <span className="shrink-0 text-xs text-slate-500 dark:text-slate-400">
-                          阅读 →
+                          <Text id="novel.read" />
                         </span>
                       </NavigationLink>
                     </li>

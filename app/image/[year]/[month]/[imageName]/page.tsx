@@ -1,3 +1,5 @@
+import { getTranslations } from "@/lib/i18n/server"
+import { Text } from "@/components/locale-provider"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
@@ -39,7 +41,7 @@ export async function generateMetadata({ params }: ImagePageProps) {
   const imageName = decodeRouteParam(params.imageName)
 
   return {
-    title: `${imageName}｜图片展示`,
+    title: `${imageName} | ${getTranslations()("images.title")}`,
   }
 }
 
@@ -59,7 +61,7 @@ export default async function ImagePage({ params }: ImagePageProps) {
     <section className="py-8">
       <header className="mb-6">
         <p className="text-sm uppercase tracking-[0.25em] text-slate-500 dark:text-slate-400">
-          图片展示
+          <Text id="images.title" />
         </p>
         <h1 className="mt-2 break-all text-2xl font-semibold tracking-tight">{image.fileName}</h1>
       </header>
@@ -77,13 +79,13 @@ export default async function ImagePage({ params }: ImagePageProps) {
       </div>
 
       <p className="mt-4 break-all text-sm text-slate-500 dark:text-slate-400">
-        文件名：{image.fileName}
+        <Text id="images.fileName" values={{ name: image.fileName }} />
       </p>
 
       <section className="mt-10">
         <div className="mb-4 flex items-baseline justify-between gap-4">
-          <h2 className="text-xl font-semibold">图片目录</h2>
-          <span className="text-sm text-slate-500 dark:text-slate-400">共 {allImages.length} 张</span>
+          <h2 className="text-xl font-semibold"><Text id="images.catalog" /></h2>
+          <span className="text-sm text-slate-500 dark:text-slate-400"><Text id="images.total" values={{ count: allImages.length }} /></span>
         </div>
 
         <div className="space-y-3">
@@ -94,9 +96,9 @@ export default async function ImagePage({ params }: ImagePageProps) {
               className="group rounded-lg border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900"
             >
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 font-medium [&::-webkit-details-marker]:hidden">
-                <span>{group.year}年{group.month}月</span>
+                <span><Text id="images.month" values={{ year: group.year, month: group.month }} /></span>
                 <span className="text-sm text-slate-500 dark:text-slate-400">
-                  {group.images.length} 张
+                  <Text id="images.count" values={{ count: group.images.length }} />
                 </span>
               </summary>
 

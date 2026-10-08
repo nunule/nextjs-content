@@ -1,3 +1,4 @@
+import { Text } from "@/components/locale-provider"
 import { redirect } from "next/navigation"
 import { listImageAssets } from "@/lib/image-assets"
 
@@ -19,11 +20,11 @@ export default async function ImagesIndexPage() {
     return (
       <section className="py-8">
         <p className="text-sm uppercase tracking-[0.25em] text-slate-500 dark:text-slate-400">
-          图片展示
+          <Text id="images.title" />
         </p>
-        <h1 className="mt-2 text-2xl font-semibold">暂无图片</h1>
+        <h1 className="mt-2 text-2xl font-semibold"><Text id="images.empty" /></h1>
         <p className="mt-3 text-slate-600 dark:text-slate-300">
-          请先按照图片目录规则添加图片。
+          <Text id="images.emptyHelp" />
         </p>
       </section>
     )

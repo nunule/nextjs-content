@@ -1,6 +1,8 @@
 "use client"
 
 import { useId, useState, type ReactNode } from "react"
+import { useLocale } from "@/components/locale-provider"
+import type { MessageKey, MessageValues } from "@/lib/i18n/messages"
 
 interface DisclosureProps {
   title: ReactNode
@@ -9,9 +11,12 @@ interface DisclosureProps {
   className?: string
   buttonClassName?: string
   label?: string
+  labelKey?: MessageKey
+  labelValues?: MessageValues
 }
 
-export function Disclosure({ title, children, defaultOpen = false, className = "", buttonClassName = "", label }: DisclosureProps) {
+export function Disclosure({ title, children, defaultOpen = false, className = "", buttonClassName = "", label, labelKey, labelValues }: DisclosureProps) {
+  const { t } = useLocale()
   const [open, setOpen] = useState(defaultOpen)
   const id = useId()
 
@@ -20,7 +25,7 @@ export function Disclosure({ title, children, defaultOpen = false, className = "
       <button
         type="button"
         className={`flex w-full items-center justify-between gap-3 text-left ${buttonClassName}`}
-        aria-label={label}
+        aria-label={labelKey ? t(labelKey, labelValues) : label}
         aria-expanded={open}
         aria-controls={id}
         onClick={() => setOpen(!open)}

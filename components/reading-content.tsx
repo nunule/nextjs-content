@@ -1,5 +1,6 @@
 "use client"
 
+import { useLocale } from "@/components/locale-provider"
 import type { CSSProperties, ReactNode } from "react"
 import { useEffect, useRef, useState } from "react"
 import { useReadingPreferences } from "@/components/reading-preferences-provider"
@@ -10,6 +11,7 @@ interface ReadingContentProps {
 }
 
 export function ReadingContent({ children }: ReadingContentProps) {
+  const { t } = useLocale()
   const { preferences, setPreferences } = useReadingPreferences()
   const [settingsOpen, setSettingsOpen] = useState(false)
   const dialogRef = useRef<HTMLDialogElement>(null)
@@ -47,12 +49,12 @@ export function ReadingContent({ children }: ReadingContentProps) {
         aria-expanded={settingsOpen}
         onClick={() => setSettingsOpen(true)}
       >
-        阅读设置
+        {t("reading.settings")}
       </button>
       <dialog
         ref={dialogRef}
         className="site-surface reading-settings-dialog m-0 mt-auto w-full max-w-none rounded-t-2xl bg-white text-slate-900 shadow-2xl sm:m-auto sm:max-w-lg sm:rounded-2xl dark:bg-slate-900 dark:text-slate-100"
-        aria-label="阅读设置"
+        aria-label={t("reading.settings")}
         onCancel={() => setSettingsOpen(false)}
         onClose={() => setSettingsOpen(false)}
         onClick={(event) => {
@@ -64,20 +66,20 @@ export function ReadingContent({ children }: ReadingContentProps) {
           onClick={(event) => event.stopPropagation()}
         >
           <div className="mb-5 flex items-center justify-between">
-            <h2 className="text-lg font-semibold">阅读设置</h2>
+            <h2 className="text-lg font-semibold">{t("reading.settings")}</h2>
             <button
               type="button"
               className="min-h-[44px] rounded-lg px-3 text-sm text-slate-600 dark:text-slate-300"
               onClick={() => setSettingsOpen(false)}
             >
-              完成
+              {t("common.done")}
             </button>
           </div>
 
           <div className="space-y-5 text-sm">
             <fieldset>
-              <legend className="mb-2 font-medium">全站背景颜色</legend>
-              <p className="mb-3 text-xs leading-6 text-slate-500 dark:text-slate-400">同时应用于小说、声音、首页和关于页面。</p>
+              <legend className="mb-2 font-medium">{t("reading.background")}</legend>
+              <p className="mb-3 text-xs leading-6 text-slate-500 dark:text-slate-400">{t("reading.backgroundHelp")}</p>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                 {READING_BACKGROUNDS.map((option) => (
                   <button
@@ -100,7 +102,7 @@ export function ReadingContent({ children }: ReadingContentProps) {
                       className="mr-2 inline-block h-3 w-3 rounded-full border border-slate-300 align-[-1px]"
                       style={{ backgroundColor: option.color }}
                     />
-                    {option.label}
+                    {t(option.labelKey)}
                   </button>
                 ))}
               </div>
@@ -108,7 +110,7 @@ export function ReadingContent({ children }: ReadingContentProps) {
 
             <label className="block">
               <span className="mb-2 flex items-center justify-between font-medium">
-                <span>字体大小</span>
+                <span>{t("reading.fontSize")}</span>
                 <span className="text-slate-500 dark:text-slate-300">
                   {preferences.fontSize}px
                 </span>
@@ -126,15 +128,15 @@ export function ReadingContent({ children }: ReadingContentProps) {
                     fontSize: Number(event.target.value),
                   }))
                 }
-                aria-label="字体大小"
+                aria-label={t("reading.fontSize")}
               />
             </label>
 
             <label className="block">
               <span className="mb-2 flex items-center justify-between font-medium">
-                <span>行距</span>
+                <span>{t("reading.lineHeight")}</span>
                 <span className="text-slate-500 dark:text-slate-300">
-                  {preferences.lineHeight.toFixed(1)} 倍
+                  {t("reading.lineHeightValue", { value: preferences.lineHeight.toFixed(1) })}
                 </span>
               </span>
               <input
@@ -150,7 +152,7 @@ export function ReadingContent({ children }: ReadingContentProps) {
                     lineHeight: Number(event.target.value),
                   }))
                 }
-                aria-label="行距"
+                aria-label={t("reading.lineHeight")}
               />
             </label>
           </div>

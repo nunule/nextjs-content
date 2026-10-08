@@ -1,3 +1,5 @@
+import type { MessageKey } from "@/lib/i18n/messages"
+
 export const READING_STORAGE_KEY = "novel-reading-preferences"
 export const READING_FONT_SIZE = { MIN: 14, MAX: 24, DEFAULT: 18, STEP: 1 } as const
 export const READING_LINE_HEIGHT = { MIN: 1.4, MAX: 2.4, DEFAULT: 1.8, STEP: 0.1 } as const
@@ -16,9 +18,9 @@ export const DEFAULT_READING_PREFERENCES: ReadingPreferences = {
   lineHeight: READING_LINE_HEIGHT.DEFAULT,
 }
 
-export const READING_BACKGROUNDS: Array<{ key: ReadingBackground; label: string; color: string }> = [
-  { key: "theme", label: "跟随主题", color: "#64748b" },
-  { key: "white", label: "白色", color: "#ffffff" },
-  { key: "green", label: "护眼绿", color: "#e8f3e8" },
-  { key: "yellow", label: "护眼黄", color: "#fff7d6" },
+export const READING_BACKGROUNDS: Array<{ key: ReadingBackground; labelKey: MessageKey; color: string }> = [
+  { key: "theme", labelKey: "reading.theme", color: "#64748b" },
+  { key: "white", labelKey: "reading.white", color: "#ffffff" },
+  { key: "green", labelKey: "reading.green", color: "#e8f3e8" },
+  { key: "yellow", labelKey: "reading.yellow", color: "#fff7d6" },
 ]

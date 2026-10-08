@@ -1,5 +1,6 @@
 "use client"
 
+import { useLocale } from "@/components/locale-provider"
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react"
 import { usePathname } from "next/navigation"
 import { NAVIGATION_FEEDBACK_DELAY_MS, NAVIGATION_FEEDBACK_TIMEOUT_MS } from "@/components/navigation.constants"
@@ -7,6 +8,7 @@ import { NAVIGATION_FEEDBACK_DELAY_MS, NAVIGATION_FEEDBACK_TIMEOUT_MS } from "@/
 const NavigationFeedbackContext = createContext<(() => void) | null>(null)
 
 export function NavigationFeedbackProvider({ children }: { children: ReactNode }) {
+  const { t } = useLocale()
   const pathname = usePathname()
   const [visible, setVisible] = useState(false)
   const delay = useRef<ReturnType<typeof setTimeout>>()
@@ -36,7 +38,7 @@ export function NavigationFeedbackProvider({ children }: { children: ReactNode }
     <NavigationFeedbackContext.Provider value={begin}>
       {children}
       <div role="status" aria-live="polite" className="pointer-events-none fixed inset-x-0 top-0 z-50 h-0.5" aria-hidden={!visible}>
-        {visible && <><span className="navigation-progress block h-full w-full bg-slate-600 dark:bg-slate-300" /><span className="sr-only">正在打开页面…</span></>}
+        {visible && <><span className="navigation-progress block h-full w-full bg-slate-600 dark:bg-slate-300" /><span className="sr-only">{t("loading.page")}</span></>}
       </div>
     </NavigationFeedbackContext.Provider>
   )

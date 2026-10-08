@@ -4,6 +4,8 @@ import { allPages } from "contentlayer/generated"
 
 import { Mdx } from "@/components/mdx-components"
 
+export const dynamic = "force-dynamic"
+
 interface PageProps {
   params: {
     slug: string[]
@@ -34,12 +36,6 @@ export async function generateMetadata({
     title: page.title,
     description: page.description,
   }
-}
-
-export async function generateStaticParams(): Promise<PageProps["params"][]> {
-  return allPages.map((page) => ({
-    slug: page.slugAsParams.split("/"),
-  }))
 }
 
 export default async function PagePage({ params }: PageProps) {

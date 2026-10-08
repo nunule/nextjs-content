@@ -1,10 +1,12 @@
 "use client"
 
+import { useLocale } from "@/components/locale-provider"
 import { useTheme } from "next-themes"
 import { useEffect, useState } from "react"
 import { useReadingPreferences } from "@/components/reading-preferences-provider"
 
 export function ModeToggle() {
+  const { t } = useLocale()
   const { setTheme, resolvedTheme, forcedTheme } = useTheme()
   const { setPreferences } = useReadingPreferences()
   const [mounted, setMounted] = useState(false)
@@ -18,7 +20,7 @@ export function ModeToggle() {
       <button
         type="button"
         className="relative flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200/80 bg-white/70 text-slate-600 shadow-sm backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/70 dark:text-slate-300"
-        aria-label="切换主题"
+        aria-label={t("theme.toggle")}
       >
         <svg
           xmlns="http://www.w3.org/2005/svg"
@@ -46,8 +48,8 @@ export function ModeToggle() {
         setTheme(isDark ? "light" : "dark")
       }}
       className="relative flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200/80 bg-white/70 text-slate-600 shadow-sm backdrop-blur-sm transition-all hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 dark:border-slate-800 dark:bg-slate-900/70 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:bg-slate-800 dark:hover:text-white"
-      aria-label={isDark ? "切换为明亮模式" : "切换为暗色模式"}
-      title={isDark ? "明亮模式" : "暗色模式"}
+      aria-label={isDark ? t("theme.toLight") : t("theme.toDark")}
+      title={isDark ? t("theme.light") : t("theme.dark")}
     >
       {isDark ? (
         <svg

@@ -1,6 +1,8 @@
 "use client"
 
 import { useEffect, useId, useMemo, useRef, useState, type CSSProperties } from "react"
+import { useLocale } from "@/components/locale-provider"
+import type { MessageKey } from "@/lib/i18n/messages"
 import { Disclosure } from "@/components/disclosure"
 import { PLAYER_LOAD_TIMEOUT_MS, SPEED_OPTIONS, TIMER_MINUTES, TIMER_PRESETS } from "@/components/audio.constants"
 import { formatAudioDate } from "@/lib/audio-date"
@@ -24,6 +26,7 @@ function formatCountdown(seconds: number) {
 }
 
 export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
+  const { t } = useLocale()
   const tracks = useMemo(() => groups.flatMap((group) => group.tracks), [groups])
   const [currentId, setCurrentId] = useState(tracks[0]?.id ?? "")
   const [playing, setPlaying] = useState(false)
@@ -43,8 +46,8 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
   const [remaining, setRemaining] = useState(0)
   const [timerOpen, setTimerOpen] = useState(false)
   const [customMinutes, setCustomMinutes] = useState(String(TIMER_MINUTES.DEFAULT))
-  const [timerMessage, setTimerMessage] = useState("")
-  const [error, setError] = useState("")
+  const [timerMessage, setTimerMessage] = useState<MessageKey | "">("")
+  const [error, setError] = useState<MessageKey | "">("")
   const [controlsOpen, setControlsOpen] = useState(false)
   const [hasSelectedTrack, setHasSelectedTrack] = useState(false)
   const controlsId = useId()
@@ -71,7 +74,7 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
       audioRef.current?.pause()
       setPlaying(false)
       setIsLoading(false)
-      setError("音频加载较慢，请检查网络后点击播放按钮重试。")
+      setError("audio.loadSlow")
     }, PLAYER_LOAD_TIMEOUT_MS)
     return () => window.clearTimeout(timeout)
   }, [isLoading, currentId])
@@ -88,7 +91,7 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
         setIsLoading(false)
         setPlaying(false)
         setDeadline(null)
-        setTimerMessage("定时已到，音频已停止播放。")
+        setTimerMessage("audio.timerStopped")
       }
     }
     tick()
@@ -107,8 +110,8 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
     try {
       navigator.mediaSession.metadata = new MediaMetadata({
         title: current.title,
-        artist: "雪落山庄",
-        album: `声音记录 · ${current.date}`,
+        artist: t("site.name"),
+        album: t("audio.album", { date: current.date }),
       })
       navigator.mediaSession.setActionHandler("play", () => {
         void togglePlayRef.current()
@@ -125,7 +128,7 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
     } catch {
       // 忽略不支持的环境
     }
-  }, [current, currentIndex, tracks])
+  }, [current, currentIndex, tracks, t])
 
   async function playTrack(track: AudioTrack) {
     const audio = audioRef.current
@@ -153,7 +156,7 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
     } catch (reason) {
       if (request !== playRequest.current) return
       if (reason instanceof DOMException && reason.name === "AbortError") return
-      setError("未能开始播放，请点击播放按钮重试。")
+      setError("audio.startFailed")
     } finally {
       if (request === playRequest.current) {
         setIsLoading(false)
@@ -172,7 +175,7 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
     } else {
       if (deadline !== null && Date.now() >= deadline) {
         setDeadline(null)
-        setTimerMessage("定时已到，音频已停止播放。")
+        setTimerMessage("audio.timerStopped")
         return
       }
       setError("")
@@ -192,7 +195,7 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
         try {
           await playTrack(current)
         } catch {
-          setError("无法播放音频，请点击播放按钮重试。")
+          setError("audio.playFailed")
         }
       } finally {
         if (request === playRequest.current) setIsLoading(false)
@@ -269,7 +272,7 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
     if (deadline !== null && Date.now() >= deadline) {
       setDeadline(null)
       setRemaining(0)
-      setTimerMessage("定时已结束，播放已暂停。")
+      setTimerMessage("audio.timerPaused")
       return
     }
     if (repeat === "one") {
@@ -283,7 +286,7 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
 
   function setTimerByMinutes(mins: number) {
     if (!Number.isFinite(mins) || mins < TIMER_MINUTES.MIN || mins > TIMER_MINUTES.MAX) {
-      setTimerMessage(`请输入有效分钟数（${TIMER_MINUTES.MIN}–${TIMER_MINUTES.MAX}）。`)
+      setTimerMessage("audio.timerInvalid")
       return
     }
     setRemaining(mins * 60)
@@ -295,13 +298,13 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
   function cancelTimer() {
     setDeadline(null)
     setRemaining(0)
-    setTimerMessage("已取消定时暂停。")
+    setTimerMessage("audio.timerCancelled")
   }
 
   const progressPercent = duration > 0 ? ((isSeeking ? seekValue : currentTime) / duration) * 100 : 0
   const activeTimeDisplay = isSeeking ? seekValue : currentTime
   const activelyPlaying = playing && !isLoading && !error
-  const status = error ? "加载失败" : isLoading ? (playing ? "缓冲中" : "加载中") : playing ? "播放中" : hasEnded ? "已结束" : hasStarted ? "已暂停" : "就绪"
+  const status = t(error ? "audio.statusFailed" : isLoading ? (playing ? "audio.statusBuffering" : "audio.statusLoading") : playing ? "audio.statusPlaying" : hasEnded ? "audio.statusEnded" : hasStarted ? "audio.statusPaused" : "audio.statusReady")
 
   function renderTracks(group: AudioGroup) {
     return (
@@ -317,7 +320,7 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
                   if (isCurrent) void togglePlay()
                   else void playTrack(track)
                 }}
-                aria-label={`${isCurrent && playing ? "暂停" : "播放"} ${title}`}
+                aria-label={`${t(isCurrent && playing ? "audio.pause" : "audio.play")} ${title}`}
                 aria-current={isCurrent ? "true" : undefined}
                 className={`flex w-full items-center gap-3 px-4 py-5 text-left transition-colors sm:px-5 ${
                   isCurrent
@@ -365,7 +368,7 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
             setIsLoading(false)
             setPlaying(false)
             setDeadline(null)
-            setTimerMessage("定时已到，音频已停止播放。")
+            setTimerMessage("audio.timerStopped")
             return
           }
           setPlaying(true)
@@ -403,34 +406,34 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
         onError={() => {
           setPlaying(false)
           setIsLoading(false)
-          setError("音频加载失败，请重新点击音轨尝试。")
+          setError("audio.loadFailed")
         }}
       />
 
-      <section aria-label="音频目录" className="space-y-7">
+      <section aria-label={t("audio.catalog")} className="space-y-7">
         <div className="flex items-center justify-between gap-3">
-          <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">最新声音</h2>
-          <span className="text-xs text-slate-500 dark:text-slate-400">共 {tracks.length} 段音频</span>
+          <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">{t("audio.latestTitle")}</h2>
+          <span className="text-xs text-slate-500 dark:text-slate-400">{t("audio.total", { count: tracks.length })}</span>
         </div>
         <article className="site-surface overflow-hidden rounded-2xl border border-slate-200/80 bg-white/70 dark:border-slate-800/80 dark:bg-slate-900/60">
           <header className="flex items-center justify-between gap-3 border-b border-slate-100 px-4 py-4 sm:px-5 dark:border-slate-800/60">
             <div className="flex items-center gap-2.5">
               <h3 className="font-mono text-sm font-medium text-slate-700 dark:text-slate-300">{formatAudioDate(groups[0].date)}</h3>
-              <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">最新</span>
+              <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">{t("audio.latest")}</span>
             </div>
-            <span className="text-xs text-slate-500 dark:text-slate-400">{groups[0].tracks.length} 段</span>
+            <span className="text-xs text-slate-500 dark:text-slate-400">{t("audio.count", { count: groups[0].tracks.length })}</span>
           </header>
           {renderTracks(groups[0])}
         </article>
         {groups.length > 1 && (
           <div className="space-y-3">
-            <h2 className="pb-1 text-sm font-medium text-slate-500 dark:text-slate-400">往期声音</h2>
+            <h2 className="pb-1 text-sm font-medium text-slate-500 dark:text-slate-400">{t("audio.archive")}</h2>
             {groups.slice(1).map((group) => (
               <Disclosure
                 key={group.date}
                 className="site-surface overflow-hidden rounded-xl border border-slate-200/70 bg-white/50 dark:border-slate-800/70 dark:bg-slate-900/40"
                 buttonClassName="px-4 py-4 text-sm font-medium text-slate-600 hover:bg-slate-50 sm:px-5 dark:text-slate-300 dark:hover:bg-slate-800/40"
-                title={<span className="flex items-center justify-between gap-3"><span className="font-mono">{formatAudioDate(group.date)}</span><span className="text-xs font-normal text-slate-500 dark:text-slate-400">{group.tracks.length} 段</span></span>}
+                title={<span className="flex items-center justify-between gap-3"><span className="font-mono">{formatAudioDate(group.date)}</span><span className="text-xs font-normal text-slate-500 dark:text-slate-400">{t("audio.count", { count: group.tracks.length })}</span></span>}
               >
                 <div className="border-t border-slate-100 dark:border-slate-800/60">{renderTracks(group)}</div>
               </Disclosure>
@@ -442,7 +445,7 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
       {hasSelectedTrack && (
         <div className="audio-player-dock fixed inset-x-0 z-40 px-3 sm:px-6">
           <section
-            aria-label="音频播放控制"
+            aria-label={t("audio.controls")}
             onKeyDown={(event) => {
               if (event.key === "Escape" && controlsOpen) {
                 setControlsOpen(false)
@@ -457,16 +460,16 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
                   <p className="truncate text-sm font-medium text-slate-900 dark:text-slate-100" title={current.title.replace(/_+/g, " · ")}>{current.title.replace(/_+/g, " · ")}</p>
                   <p className="mt-1 flex flex-wrap items-center gap-x-2 text-[10px] leading-4 text-slate-500 dark:text-slate-400">
                     <span role="status" aria-live="polite">{status}</span>
-                    <span>{formatAudioDate(current.date)} · 第 {current.order} 段</span>
-                    {deadline !== null && <span>剩余 {formatCountdown(remaining)}</span>}
+                    <span>{formatAudioDate(current.date)} · {t("audio.track", { number: current.order })}</span>
+                    {deadline !== null && <span>{t("audio.remaining", { time: formatCountdown(remaining) })}</span>}
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={() => void togglePlay()}
                   className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-slate-900 text-white transition-colors hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200"
-                  aria-label={isLoading ? "取消加载" : playing ? "暂停" : "播放"}
-                  title={isLoading ? "取消加载" : playing ? "暂停" : "播放"}
+                  aria-label={t(isLoading ? "audio.cancelLoading" : playing ? "audio.pause" : "audio.play")}
+                  title={t(isLoading ? "audio.cancelLoading" : playing ? "audio.pause" : "audio.play")}
                 >
                   {isLoading ? (
                     <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24" fill="none">
@@ -488,7 +491,7 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
                 <button
                   ref={controlsToggleRef}
                   type="button"
-                  aria-label={controlsOpen ? "收起播放设置" : "展开播放设置"}
+                  aria-label={t(controlsOpen ? "audio.collapseSettings" : "audio.expandSettings")}
                   aria-expanded={controlsOpen}
                   aria-controls={controlsId}
                   onClick={() => setControlsOpen(!controlsOpen)}
@@ -506,7 +509,7 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
                     step={0.1}
                     value={activeTimeDisplay}
                     disabled={duration === 0}
-                    aria-label="播放进度"
+                    aria-label={t("audio.progress")}
                     aria-valuemin={0}
                     aria-valuemax={duration}
                     aria-valuenow={activeTimeDisplay}
@@ -527,8 +530,8 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
               </div>
 
 
-              {timerMessage && <p role="status" className="mt-2 text-xs text-amber-700 dark:text-amber-300">{timerMessage}</p>}
-              {error && <p role="alert" className="mt-2 text-xs text-red-600 dark:text-red-400">{error}</p>}
+              {timerMessage && <p role="status" className="mt-2 text-xs text-amber-700 dark:text-amber-300">{t(timerMessage, { min: TIMER_MINUTES.MIN, max: TIMER_MINUTES.MAX })}</p>}
+              {error && <p role="alert" className="mt-2 text-xs text-red-600 dark:text-red-400">{t(error)}</p>}
             </div>
             <div
               id={controlsId}
@@ -537,7 +540,7 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
               {...(!controlsOpen ? { inert: "" } : {})}
               className="audio-player-options order-first max-h-[min(55dvh,24rem)] overflow-y-auto border-b border-slate-200 px-4 pb-4 dark:border-slate-800"
             >
-              <h3 className="pt-4 text-sm font-medium text-slate-800 dark:text-slate-200">播放设置</h3>
+              <h3 className="pt-4 text-sm font-medium text-slate-800 dark:text-slate-200">{t("audio.settings")}</h3>
               <div className="mt-3 flex items-center justify-center gap-2 sm:gap-5">
                 {/* 上一曲 */}
                 <button
@@ -545,8 +548,8 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
                   onClick={() => void playTrack(tracks[currentIndex - 1])}
                   disabled={currentIndex === 0}
                   className="flex h-11 w-11 items-center justify-center rounded-full text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 disabled:opacity-30 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
-                  aria-label="上一段音频"
-                  title="上一段音频"
+                  aria-label={t("audio.previous")}
+                  title={t("audio.previous")}
                 >
                   <svg xmlns="http://www.w3.org/2005/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
                     <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
@@ -559,8 +562,8 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
                   onClick={() => seekRelative(-10)}
                   disabled={duration === 0}
                   className="flex h-11 w-11 items-center justify-center rounded-full text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 disabled:opacity-30 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
-                  aria-label="快退 10 秒"
-                  title="快退 10 秒"
+                  aria-label={t("audio.rewind")}
+                  title={t("audio.rewind")}
                 >
                   <svg xmlns="http://www.w3.org/2005/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
                     <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
@@ -575,8 +578,8 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
                   onClick={() => seekRelative(10)}
                   disabled={duration === 0}
                   className="flex h-11 w-11 items-center justify-center rounded-full text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 disabled:opacity-30 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
-                  aria-label="快进 10 秒"
-                  title="快进 10 秒"
+                  aria-label={t("audio.forward")}
+                  title={t("audio.forward")}
                 >
                   <svg xmlns="http://www.w3.org/2005/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
                     <path d="M21 12a9 9 0 1 1-9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
@@ -591,8 +594,8 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
                   onClick={() => void playTrack(tracks[currentIndex + 1])}
                   disabled={currentIndex === tracks.length - 1}
                   className="flex h-11 w-11 items-center justify-center rounded-full text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 disabled:opacity-30 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
-                  aria-label="下一段音频"
-                  title="下一段音频"
+                  aria-label={t("audio.next")}
+                  title={t("audio.next")}
                 >
                   <svg xmlns="http://www.w3.org/2005/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
                     <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
@@ -612,8 +615,8 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
                         ? "border-slate-900 bg-slate-900 text-white dark:border-white dark:bg-white dark:text-slate-950"
                         : "border-slate-200 hover:bg-slate-100 dark:border-slate-800 dark:hover:bg-slate-800"
                     }`}
-                    title="切换循环模式"
-                    aria-label="切换循环模式"
+                    title={t("audio.repeatToggle")}
+                    aria-label={t("audio.repeatToggle")}
                   >
                     {repeat === "one" ? (
                       <svg xmlns="http://www.w3.org/2005/svg" viewBox="0 0 24 24" fill="currentColor" className="h-3.5 w-3.5">
@@ -625,7 +628,7 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
                       </svg>
                     )}
                     <span>
-                      {repeat === "off" ? "顺序" : repeat === "list" ? "列表循环" : "单曲循环"}
+                      {t(repeat === "off" ? "audio.sequential" : repeat === "list" ? "audio.repeatList" : "audio.repeatOne")}
                     </span>
                   </button>
 
@@ -642,7 +645,7 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
                         ? "border-slate-300 bg-slate-50 text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
                         : "border-slate-200 text-slate-400 hover:bg-slate-100 dark:border-slate-800 dark:hover:bg-slate-800"
                     }`}
-                    aria-label="自动播放下一首开关"
+                    aria-label={t("audio.autoNextToggle")}
                     aria-pressed={autoNext}
                   >
                     <span
@@ -650,7 +653,7 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
                         autoNext ? "bg-emerald-500" : "bg-slate-300 dark:bg-slate-600"
                       }`}
                     />
-                    <span>自动连播</span>
+                    <span>{t("audio.autoNext")}</span>
                   </button>
                 </div>
 
@@ -660,8 +663,8 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
                     type="button"
                     onClick={cycleSpeed}
                     className="flex items-center rounded-lg border border-slate-200 px-2 py-1 font-mono text-xs hover:bg-slate-100 dark:border-slate-800 dark:hover:bg-slate-800"
-                    title="切换播放速度"
-                    aria-label={`当前速度 ${speed}x，点击切换`}
+                    title={t("audio.speedToggle")}
+                    aria-label={t("audio.speed", { speed })}
                   >
                     {speed}x
                   </button>
@@ -675,7 +678,7 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
                         ? "border-amber-500/80 bg-amber-50 text-amber-900 dark:border-amber-400/30 dark:bg-amber-950/40 dark:text-amber-200"
                         : "border-slate-200 hover:bg-slate-100 dark:border-slate-800 dark:hover:bg-slate-800"
                     }`}
-                    aria-label="睡眠定时设置"
+                    aria-label={t("audio.timerSettings")}
                     aria-expanded={timerOpen}
                     aria-controls="sleep-timer-panel"
                   >
@@ -684,7 +687,7 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
                       <polyline points="12 6 12 12 16 14" />
                     </svg>
                     <span>
-                      {deadline !== null ? `剩余 ${formatCountdown(remaining)}` : "定时"}
+                      {deadline !== null ? t("audio.remaining", { time: formatCountdown(remaining) }) : t("audio.timer")}
                     </span>
                   </button>
 
@@ -694,7 +697,7 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
                       type="button"
                       onClick={toggleMute}
                       className="flex items-center justify-center text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100"
-                      aria-label={muted || volume === 0 ? "取消静音" : "静音"}
+                      aria-label={t(muted || volume === 0 ? "audio.unmute" : "audio.mute")}
                     >
                       {muted || volume === 0 ? (
                         <svg xmlns="http://www.w3.org/2005/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
@@ -718,7 +721,7 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
                       step={0.05}
                       value={muted ? 0 : volume}
                       onChange={(e) => handleVolumeChange(Number(e.target.value))}
-                      aria-label="音量大小"
+                      aria-label={t("audio.volume")}
                       className="volume-range w-14 text-slate-800 dark:text-slate-200"
                       style={{ "--volume-progress": `${(muted ? 0 : volume) * 100}%` } as CSSProperties}
                     />
@@ -730,15 +733,15 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
               <div id="sleep-timer-panel" className="disclosure-content" data-open={timerOpen} aria-hidden={!timerOpen} {...(!timerOpen ? { inert: "" } : {})}>
                 <div className="min-h-0 overflow-hidden">
                   <div className="mt-4 rounded-xl border border-slate-200/80 bg-slate-50/80 p-4 transition-all dark:border-slate-800 dark:bg-slate-950/60">
-                    <div className="flex items-center justify-between text-xs font-medium text-slate-600 dark:text-slate-300">
-                      <span>睡眠定时（到时自动停止播放）</span>
+                    <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-medium text-slate-600 dark:text-slate-300">
+                      <span>{t("audio.sleepTimer")}</span>
                       {deadline !== null && (
                         <button
                           type="button"
                           onClick={cancelTimer}
                           className="text-red-500 hover:underline dark:text-red-400"
                         >
-                          取消定时
+                          {t("audio.cancelTimer")}
                         </button>
                       )}
                     </div>
@@ -750,7 +753,7 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
                           onClick={() => setTimerByMinutes(mins)}
                           className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs transition hover:border-slate-300 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800"
                         >
-                          {mins} 分钟
+                          {t("audio.minutes", { count: mins })}
                         </button>
                       ))}
                       <div className="flex items-center gap-1.5 text-xs text-slate-500">
@@ -761,16 +764,16 @@ export function AudioPlayer({ groups }: { groups: AudioGroup[] }) {
                           value={customMinutes}
                           onChange={(e) => setCustomMinutes(e.target.value)}
                           className="w-14 rounded-lg border border-slate-200 bg-white px-2 py-1 text-center font-mono dark:border-slate-700 dark:bg-slate-900"
-                          placeholder="分"
-                          aria-label="自定义定时分钟"
+                          placeholder={t("audio.minuteShort")}
+                          aria-label={t("audio.customMinutes")}
                         />
-                        <span>分</span>
+                        <span>{t("audio.minuteShort")}</span>
                         <button
                           type="button"
                           onClick={() => setTimerByMinutes(Number(customMinutes))}
                           className="rounded-lg bg-slate-900 px-2.5 py-1 text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900"
                         >
-                          确定
+                          {t("common.confirm")}
                         </button>
                       </div>
                     </div>

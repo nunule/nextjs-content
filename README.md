@@ -14,6 +14,16 @@
 
 图片目录和 URL 规则请参考 [public/images/README.md](./public/images/README.md)。
 
+## 中英文界面
+
+顶栏的 `EN` / `中文` 按钮切换界面语言，默认中文。语言偏好保存在 `snowfall-locale` Cookie 中，有效期一年；服务端首屏、页面标题与描述同步采用所选语言。切换保持当前 URL、阅读位置和播放器状态。
+
+导航、页面介绍、作品状态、章节导航、阅读设置、播放器、加载及错误提示均支持中英文。小说正文、作品简介和原始音频标题保留作者提供的语言。
+
+文案集中在 `lib/i18n/messages.ts`，英文与中文使用相同的类型化键名。新界面文案应通过 `Text` 或 `useLocale().t` 展示；服务端使用 `getTranslations`。关于页面的中英文介绍也在这份文案表中维护。
+
+执行 `node scripts/test-i18n.cjs` 检查语言覆盖、占位符、英文单复数、Cookie 校验及首屏语言。
+
 ## ImageKit 小说接入
 
 复制 `.env.example` 为 `.env.local`，填写 ImageKit 服务端环境变量：

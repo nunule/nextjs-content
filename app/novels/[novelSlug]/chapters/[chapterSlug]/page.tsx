@@ -1,10 +1,11 @@
 import type { Metadata } from "next"
-import Link from "next/link"
+import { NavigationLink } from "@/components/navigation-link"
 import { notFound } from "next/navigation"
 
 import { PlainTextContent } from "@/components/plain-text-content"
 import { ReadingContent } from "@/components/reading-content"
-import { getNovelBySlug } from "@/lib/novel-source"
+import { CatalogNotice } from "@/components/catalog-notice"
+import { getNovelCatalog } from "@/lib/novel-source"
 
 interface ChapterPageProps {
   params: {
@@ -22,12 +23,13 @@ function decodeRouteParam(value: string) {
 }
 
 async function getChapterFromParams(params: ChapterPageProps["params"]) {
-  const novel = await getNovelBySlug(params.novelSlug)
+  const catalog = await getNovelCatalog()
+  const novel = catalog.novels.find((item) => item.slug === decodeRouteParam(params.novelSlug))
   const chapter = novel?.chapters.find(
     (item) => item.slug === decodeRouteParam(params.chapterSlug),
   )
 
-  return { chapter, novel }
+  return { chapter, novel, warning: catalog.warning, error: catalog.error }
 }
 
 export const dynamic = "force-dynamic"
@@ -49,9 +51,10 @@ export async function generateMetadata({
 }
 
 export default async function ChapterPage({ params }: ChapterPageProps) {
-  const { chapter, novel } = await getChapterFromParams(params)
+  const { chapter, novel, warning, error } = await getChapterFromParams(params)
 
   if (!chapter || !novel) {
+    if (error || warning) throw new Error("章节暂时无法读取")
     notFound()
   }
 
@@ -60,11 +63,12 @@ export default async function ChapterPage({ params }: ChapterPageProps) {
   const nextChapter = novel.chapters[currentIndex + 1]
 
   return (
-    <article className="py-8">
+    <article className="py-4 sm:py-8">
+      {warning && <CatalogNotice message={warning} warning />}
       <div className="mb-8 text-sm text-slate-500 dark:text-slate-400">
-        <Link href="/" className="hover:text-slate-900 dark:hover:text-white">
+        <NavigationLink href="/novels" className="hover:text-slate-900 dark:hover:text-white">
           ← 返回作品列表
-        </Link>
+        </NavigationLink>
         <span className="mx-2">/</span>
         <span>{novel.title}</span>
       </div>
@@ -73,7 +77,7 @@ export default async function ChapterPage({ params }: ChapterPageProps) {
         <p className="mb-3 text-sm text-slate-500 dark:text-slate-400">
           {novel.title}
         </p>
-        <h1 className="text-3xl font-semibold tracking-tight">
+        <h1 className="text-2xl font-semibold leading-snug tracking-tight sm:text-3xl">
           第{chapter.chapterNumber}章：{chapter.title}
         </h1>
       </header>
@@ -82,29 +86,29 @@ export default async function ChapterPage({ params }: ChapterPageProps) {
         <PlainTextContent content={chapter.content} />
       </ReadingContent>
 
-      <nav className="mt-12 flex items-center justify-between border-t border-slate-200 pt-6 text-sm dark:border-slate-800">
+      <nav className="mt-12 flex items-center justify-between gap-3 border-t border-slate-200 pt-6 text-sm dark:border-slate-800">
         {previousChapter ? (
-          <Link
+          <NavigationLink
             href={previousChapter.path}
             className="text-slate-600 hover:underline dark:text-slate-300"
           >
             ← 上一章
-          </Link>
+          </NavigationLink>
         ) : (
           <span />
         )}
 
-        <Link href="/" className="text-slate-600 hover:underline dark:text-slate-300">
+        <NavigationLink href="/novels" className="text-slate-600 hover:underline dark:text-slate-300">
           返回目录
-        </Link>
+        </NavigationLink>
 
         {nextChapter ? (
-          <Link
+          <NavigationLink
             href={nextChapter.path}
             className="text-slate-600 hover:underline dark:text-slate-300"
           >
             下一章 →
-          </Link>
+          </NavigationLink>
         ) : (
           <span />
         )}

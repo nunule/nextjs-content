@@ -38,7 +38,7 @@ input[type="range"].player-range {
 }
 
 input[type="range"].player-range:focus {
-  outline: none;
+  outline-offset: 6px;
 }
 
 input[type="range"].player-range::-webkit-slider-runnable-track {
@@ -129,6 +129,23 @@ input[type="range"].volume-range::-webkit-slider-thumb {
   border: 1.5px solid currentColor;
 }
 
+input[type="range"].volume-range::-moz-range-track {
+  height: 3px;
+  border-radius: 9999px;
+  background: rgba(148, 163, 184, 0.3);
+}
+input[type="range"].volume-range::-moz-range-progress {
+  height: 3px;
+  background: currentColor;
+}
+input[type="range"].volume-range::-moz-range-thumb {
+  height: 10px;
+  width: 10px;
+  border-radius: 9999px;
+  background: white;
+  border: 1.5px solid currentColor;
+}
+
 /* 动感音频均衡器小柱动画 */
 @keyframes eq-wave-1 {
   0%, 100% { height: 25%; }
@@ -186,4 +203,81 @@ input[type="range"].volume-range::-webkit-slider-thumb {
 
 .novel-summary li {
   margin-top: 0.35rem;
+}
+
+/* 展开与收起都保留布局过渡；关闭的内容同时使用 inert 移出键盘导航。 */
+.disclosure-content {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  visibility: hidden;
+  transition: grid-template-rows 200ms ease, opacity 200ms ease, visibility 200ms;
+}
+
+.disclosure-content[data-open="true"] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+}
+
+:where(a, button, input):focus-visible {
+  outline: 2px solid #64748b;
+  outline-offset: 4px;
+}
+
+html[data-site-background="white"] { --site-background: #ffffff; --site-surface: #ffffff; }
+html[data-site-background="green"] { --site-background: #e8f3e8; --site-surface: #f2f8f2; }
+html[data-site-background="yellow"] { --site-background: #fff7d6; --site-surface: #fffbea; }
+html[data-site-background],
+html[data-site-background] body {
+  background-color: var(--site-background);
+}
+html[data-site-background] .site-surface {
+  background-color: var(--site-surface);
+}
+html[data-site-background] .site-ambient { background: none; }
+
+/* 导航进度留在固定图层，快速切换时不显示；只动画合成属性。 */
+.navigation-progress {
+  transform-origin: left;
+  animation: navigation-progress 1.5s ease-out infinite;
+}
+@keyframes navigation-progress {
+  from { transform: scaleX(0.08); opacity: 0.8; }
+  to { transform: scaleX(0.95); opacity: 0.3; }
+}
+
+.reading-settings-button {
+  bottom: max(1.25rem, env(safe-area-inset-bottom));
+}
+.audio-player-dock {
+  bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+.audio-player-options :where(button, input[type="number"]) {
+  min-height: 2.5rem;
+}
+.audio-player-options button {
+  min-width: 2.5rem;
+}
+.reading-settings-dialog {
+  padding: 0;
+  max-height: calc(100dvh - 2rem);
+}
+.reading-settings-dialog::backdrop { background: rgba(15, 23, 42, 0.45); }
+.reading-settings-panel { padding-bottom: max(1.25rem, env(safe-area-inset-bottom)); }
+.reading-settings-dialog[open] { animation: panel-enter 180ms ease-out; }
+
+@keyframes panel-enter {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 尊重系统减少动态效果的设置，包括持续声波、加载动画及按钮缩放。 */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-eq-1, .animate-eq-2, .animate-eq-3, .animate-eq-4 { height: 60%; }
 }

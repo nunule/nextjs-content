@@ -2,9 +2,11 @@
 
 import { useTheme } from "next-themes"
 import { useEffect, useState } from "react"
+import { useReadingPreferences } from "@/components/reading-preferences-provider"
 
 export function ModeToggle() {
-  const { setTheme, resolvedTheme } = useTheme()
+  const { setTheme, resolvedTheme, forcedTheme } = useTheme()
+  const { setPreferences } = useReadingPreferences()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -34,12 +36,15 @@ export function ModeToggle() {
     )
   }
 
-  const isDark = resolvedTheme === "dark"
+  const isDark = (forcedTheme || resolvedTheme) === "dark"
 
   return (
     <button
       type="button"
-      onClick={() => setTheme(isDark ? "light" : "dark")}
+      onClick={() => {
+        setPreferences((current) => ({ ...current, background: "theme" }))
+        setTheme(isDark ? "light" : "dark")
+      }}
       className="relative flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200/80 bg-white/70 text-slate-600 shadow-sm backdrop-blur-sm transition-all hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 dark:border-slate-800 dark:bg-slate-900/70 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:bg-slate-800 dark:hover:text-white"
       aria-label={isDark ? "切换为明亮模式" : "切换为暗色模式"}
       title={isDark ? "明亮模式" : "暗色模式"}

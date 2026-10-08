@@ -7,6 +7,7 @@ import {
   signImageKitUrl,
 } from "@/lib/imagekit"
 import type { ImageKitAsset, ImageKitConfig } from "@/lib/imagekit"
+import { CATALOG_REQUEST_TIMEOUT_MS, NOVEL_DOWNLOAD_CONCURRENCY, NOVEL_STALE_CACHE_MS } from "@/lib/catalog.constants"
 
 const defaultNovelPath = "/novels/"
 const supportedNovelExtensions = [".txt", ".md", ".mdx"] as const
@@ -45,6 +46,7 @@ export interface RemoteNovel {
 export interface NovelCatalogResult {
   configured: boolean
   error?: string
+  warning?: string
   novels: RemoteNovel[]
 }
 
@@ -54,6 +56,7 @@ interface TextCacheEntry {
 }
 
 interface CatalogCacheEntry {
+  key: string
   expiresAt: number
   novels: RemoteNovel[]
 }
@@ -71,6 +74,7 @@ interface ParsedChapter {
 
 const textCache = new Map<string, TextCacheEntry>()
 let catalogCache: CatalogCacheEntry | null = null
+let catalogRequest: { key: string; promise: Promise<NovelCatalogResult> } | null = null
 
 function getConfig(): NovelSourceConfig | null {
   const config = getImageKitConfig()
@@ -141,6 +145,7 @@ async function downloadAssetText(asset: ImageKitAsset, config: NovelSourceConfig
 
   const response = await fetch(getSignedAssetUrl(getAssetUrl(asset, config), config), {
     cache: "no-store",
+    signal: AbortSignal.timeout(CATALOG_REQUEST_TIMEOUT_MS),
   })
 
   if (!response.ok) {
@@ -532,34 +537,60 @@ function parseNovel(
   }
 }
 
+async function readNovelAssets(assets: ImageKitAsset[], config: NovelSourceConfig) {
+  const results: Array<ReadableAsset | undefined> = new Array(assets.length)
+  let cursor = 0
+  let failedCount = 0
+  await Promise.all(Array.from({ length: Math.min(NOVEL_DOWNLOAD_CONCURRENCY, assets.length) }, async () => {
+    while (cursor < assets.length) {
+      const index = cursor++
+      const asset = assets[index]
+      try {
+        results[index] = { asset, text: await downloadAssetText(asset, config) }
+      } catch {
+        failedCount += 1
+        console.error("ImageKit 小说文件暂时无法读取", asset.filePath || asset.name)
+      }
+    }
+  }))
+  return { readableAssets: results.filter((asset): asset is ReadableAsset => Boolean(asset)), failedCount }
+}
+
+function getPreviousCatalog(config: NovelSourceConfig) {
+  return catalogCache?.key === `${config.urlEndpoint}:${config.novelPath}` &&
+    catalogCache.expiresAt + NOVEL_STALE_CACHE_MS > Date.now()
+      ? catalogCache.novels : null
+}
+
 export async function getNovelCatalog(): Promise<NovelCatalogResult> {
   const config = getConfig()
-
-  if (!config) {
-    return { configured: false, novels: [] }
-  }
-
-  if (catalogCache && catalogCache.expiresAt > Date.now()) {
+  if (!config) return { configured: false, novels: [] }
+  const key = `${config.urlEndpoint}:${config.novelPath}`
+  if (catalogCache?.key === key && catalogCache.expiresAt > Date.now()) {
     return { configured: true, novels: catalogCache.novels }
   }
+  if (catalogRequest?.key === key) return catalogRequest.promise
+  const request = { key, promise: loadNovelCatalog(config) }
+  catalogRequest = request
+  try {
+    return await request.promise
+  } finally {
+    if (catalogRequest === request) catalogRequest = null
+  }
+}
 
+async function loadNovelCatalog(config: NovelSourceConfig): Promise<NovelCatalogResult> {
   try {
     const assets = await listImageKitAssets(config)
     const novelAssets = assets.filter((asset) => asset.type !== "folder" && getAssetFileName(asset))
-    const parsedAssets = await Promise.allSettled(
-      novelAssets.map(async (asset): Promise<ReadableAsset> => ({
-        asset,
-        text: await downloadAssetText(asset, config),
-      })),
-    )
-    const readableAssets = parsedAssets.flatMap((result) => {
-      if (result.status === "fulfilled") {
-        return [result.value]
-      }
-
-      console.error("跳过无法读取的 ImageKit 小说文件", result.reason)
-      return []
-    })
+    const { readableAssets, failedCount } = await readNovelAssets(novelAssets, config)
+    const previous = getPreviousCatalog(config)
+    if (failedCount > 0 && previous) {
+      return { configured: true, novels: previous, warning: "部分章节更新未能加载，正在显示上次成功读取的完整目录与正文。请稍后重新加载。" }
+    }
+    if (failedCount > 0 && readableAssets.length === 0) {
+      return { configured: true, novels: [], error: "作品暂时无法读取，请稍后重新加载。" }
+    }
 
     const novelsBySlug = new Map<string, RemoteNovel>()
     const novelSlugAliases = new Map<string, string>()
@@ -620,17 +651,26 @@ export async function getNovelCatalog(): Promise<NovelCatalogResult> {
     const novels = Array.from(novelsBySlug.values())
 
     novels.sort((left, right) => left.title.localeCompare(right.title, "zh-CN"))
-    catalogCache = {
+    if (failedCount === 0) catalogCache = {
+      key: `${config.urlEndpoint}:${config.novelPath}`,
       expiresAt: Date.now() + config.cacheSeconds * 1000,
       novels,
     }
 
-    return { configured: true, novels }
-  } catch (error) {
-    console.error("读取 ImageKit 小说失败", error)
     return {
       configured: true,
-      error: error instanceof Error ? error.message : "无法读取 ImageKit 小说",
+      novels,
+      warning: failedCount > 0 ? "部分作品或章节未能加载，当前目录可能不完整。请重新加载后继续阅读。" : undefined,
+    }
+  } catch {
+    console.error("ImageKit 小说目录暂时无法读取")
+    const previous = getPreviousCatalog(config)
+    if (previous) {
+      return { configured: true, novels: previous, warning: "目录更新暂时失败，正在显示上次成功读取的内容。请稍后重新加载。" }
+    }
+    return {
+      configured: true,
+      error: "作品目录暂时无法读取，请稍后重新加载。",
       novels: [],
     }
   }

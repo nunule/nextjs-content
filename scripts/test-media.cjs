@@ -13,6 +13,8 @@ const env = {
 }
 const requests = []
 const files = [
+  "/media/20261007/2_今日续篇.mp3",
+  "/media/20261007/1_今日新声.mp3",
   "/media/202601006/10_尾声.mp3",
   "/media/202601006/2_故事.wav",
   "/media/202601006/3_片段.WAV",
@@ -37,7 +39,7 @@ function loadSource(relative, modules = new Map()) {
     : require(name)
   vm.runInNewContext(output, {
     exports: module.exports, module, require: localRequire,
-    process: { env }, Buffer, URL, URLSearchParams, Date, console, TextDecoder,
+    process: { env }, Buffer, URL, URLSearchParams, Date, console, TextDecoder, AbortSignal,
     fetch: async (url) => {
       requests.push(String(url))
       const query = new URL(url).searchParams.get("searchQuery") || ""
@@ -59,18 +61,26 @@ function loadSource(relative, modules = new Map()) {
 async function main() {
   const { getAudioCatalog, getAudioAsset } = loadSource("lib/media-source.ts")
   const { getImageKitConfig, signImageKitUrl } = loadSource("lib/imagekit.ts")
+  const { compareAudioDates, formatAudioDate } = loadSource("lib/audio-date.ts")
+  assert.equal(formatAudioDate("202601006"), "2026.10.06")
+  assert.equal(formatAudioDate("20261007"), "2026.10.07")
+  assert.equal(formatAudioDate("20240229"), "2024.02.29")
+  assert.equal(formatAudioDate("20260229"), "20260229", "invalid calendar dates are not guessed")
+  assert(compareAudioDates("20261007", "202601006") < 0, "newer content must precede legacy date folders")
   const catalog = await getAudioCatalog()
   assert.equal(catalog.configured, true)
   assert.equal(catalog.error, undefined)
-  assert.deepEqual(Array.from(catalog.groups, (group) => group.date), ["202601006", "20250101"])
-  assert.deepEqual(Array.from(catalog.groups[0].tracks, (track) => track.order), [1, 2, 3, 10])
-  assert.equal(catalog.groups[0].tracks[1].fileName, "2_故事.wav")
-  assert.equal(catalog.groups[0].tracks[1].title, "故事")
-  assert.equal(catalog.groups[0].tracks[2].fileName, "3_片段.WAV")
-  assert.equal(catalog.groups[0].tracks[0].title, "开篇")
+  assert.deepEqual(Array.from(catalog.groups, (group) => group.date), ["20261007", "202601006", "20250101"])
+  assert.deepEqual(Array.from(catalog.groups[0].tracks, (track) => track.order), [1, 2])
+  const previousGroup = catalog.groups[1]
+  assert.deepEqual(Array.from(previousGroup.tracks, (track) => track.order), [1, 2, 3, 10])
+  assert.equal(previousGroup.tracks[1].fileName, "2_故事.wav")
+  assert.equal(previousGroup.tracks[1].title, "故事")
+  assert.equal(previousGroup.tracks[2].fileName, "3_片段.WAV")
+  assert.equal(previousGroup.tracks[0].title, "开篇")
   assert.equal(requests.length, 1, "listing must not download audio")
   assert(!JSON.stringify(catalog).includes(env.IMAGEKIT_PRIVATE_KEY))
-  const track = catalog.groups[0].tracks[0]
+  const track = previousGroup.tracks[0]
   assert.equal((await getAudioAsset(track.id, getImageKitConfig())).filePath, "/media/202601006/1_开篇.mp3")
   assert.equal(await getAudioAsset("unknown", getImageKitConfig()), undefined)
   const url = new URL(signImageKitUrl("https://ik.imagekit.io/test/media/202601006/1_开篇.mp3", getImageKitConfig(), 86400))
@@ -87,7 +97,7 @@ async function main() {
   assert.equal(playback.status, 307)
   assert.equal(playback.headers.get("cache-control"), "private, no-store")
   assert(new URL(playback.headers.get("location")).searchParams.has("ik-s"))
-  const wavPlayback = await GET(new Request("http://localhost/api/media/test"), { params: { trackId: catalog.groups[0].tracks[1].id } })
+  const wavPlayback = await GET(new Request("http://localhost/api/media/test"), { params: { trackId: previousGroup.tracks[1].id } })
   assert.equal(wavPlayback.status, 307)
   assert(new URL(wavPlayback.headers.get("location")).pathname.endsWith(".wav"))
   assert(new URL(wavPlayback.headers.get("location")).searchParams.has("ik-s"))
@@ -95,7 +105,7 @@ async function main() {
   delete env.IMAGEKIT_PRIVATE_KEY
   assert.equal((await getAudioCatalog()).configured, false)
   assert.equal((await GET(new Request("http://localhost/api/media/test"), { params: { trackId: track.id } })).status, 503)
-  console.log("PASS: mixed MP3/WAV ordering, case-insensitive extensions, folder filtering, lazy audio, private URL signing, redirect/404/503, novel summary regression")
+  console.log("PASS: newest content first, legacy date folders, mixed MP3/WAV ordering, folder filtering, lazy audio, private URL signing, redirect/404/503, novel summary regression")
 }
 
 main().catch((error) => { console.error(error); process.exitCode = 1 })

@@ -1,4 +1,5 @@
 import { createHmac } from "node:crypto"
+import { CATALOG_REQUEST_TIMEOUT_MS } from "@/lib/catalog.constants"
 
 export interface ImageKitConfig {
   apiKey: string
@@ -47,6 +48,7 @@ export async function listImageKitFiles(config: ImageKitConfig, folder: string) 
     const response = await fetch(`https://api.imagekit.io/v1/files?${params}`, {
       headers: { Authorization: `Basic ${Buffer.from(`${config.apiKey}:`).toString("base64")}` },
       cache: "no-store",
+      signal: AbortSignal.timeout(CATALOG_REQUEST_TIMEOUT_MS),
     })
     if (!response.ok) throw new Error(`ImageKit 文件列表请求失败（${response.status}）`)
     const page: unknown = await response.json()

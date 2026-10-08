@@ -1,9 +1,10 @@
-import Link from "next/link"
+import { NavigationLink } from "@/components/navigation-link"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Analytics } from "@/components/analytics"
 import { ModeToggle } from "@/components/mode-toggle"
 import { SiteLogo } from "@/components/site-logo"
+import { SiteNav } from "@/components/site-nav"
 
 export const metadata = {
   title: {
@@ -27,51 +28,32 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <div className="relative min-h-screen flex flex-col justify-between">
             {/* 极简氛围衬底：极轻量CSS无任何外部图片依赖 */}
-            <div className="pointer-events-none fixed inset-0 z-0 bg-[radial-gradient(ellipse_80%_40%_at_50%_-10%,rgba(148,163,184,0.08),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_40%_at_50%_-10%,rgba(255,255,255,0.04),rgba(0,0,0,0))]" />
+            <div className="site-ambient pointer-events-none fixed inset-0 z-0 bg-[radial-gradient(ellipse_80%_40%_at_50%_-10%,rgba(148,163,184,0.08),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_40%_at_50%_-10%,rgba(255,255,255,0.04),rgba(0,0,0,0))]" />
 
             <div className="relative z-10 max-w-2xl mx-auto w-full py-8 sm:py-12 px-4 sm:px-6">
               <header className="mb-10 sm:mb-12">
-                <div className="flex items-center justify-between gap-4">
-                  {/* 雪落山庄 Brand Logo (白色主体 + 黑色边框) */}
-                  <Link
+                <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3 sm:flex-nowrap">
+                  {/* 透明底雪山标志，随页面主题切换黑白。 */}
+                  <NavigationLink
                     href="/"
-                    className="group flex items-center gap-3 transition-opacity hover:opacity-95"
+                    className="group flex shrink-0 items-center gap-2.5 transition-opacity hover:opacity-95"
                     aria-label="雪落山庄首页"
                   >
-                    <SiteLogo className="h-9 w-9 shrink-0 shadow-sm" />
-                    <div className="flex flex-col">
-                      <span className="font-serif text-lg font-bold tracking-wider text-slate-900 dark:text-slate-100">
+                    <SiteLogo />
+                    <div className="flex flex-col gap-1">
+                      <span className="text-lg font-semibold leading-5 tracking-[0.12em] text-neutral-950 dark:text-neutral-100">
                         雪落山庄
                       </span>
-                      <span className="text-[10px] font-medium tracking-[0.2em] uppercase text-slate-400 dark:text-slate-500 font-mono">
+                      <span className="text-[9px] font-medium leading-3 tracking-[0.16em] uppercase text-slate-500 dark:text-slate-400">
                         Snowfall Villa
                       </span>
                     </div>
-                  </Link>
+                  </NavigationLink>
 
                   {/* 顶栏导航 */}
-                  <div className="flex items-center gap-4 sm:gap-6">
-                    <nav className="flex items-center space-x-5 text-sm font-medium text-slate-600 dark:text-slate-300">
-                      <Link
-                        href="/"
-                        className="transition-colors hover:text-slate-900 dark:hover:text-white"
-                      >
-                        首页
-                      </Link>
-                      <Link
-                        href="/media"
-                        className="transition-colors hover:text-slate-900 dark:hover:text-white"
-                      >
-                        声音
-                      </Link>
-                      <Link
-                        href="/about"
-                        className="transition-colors hover:text-slate-900 dark:hover:text-white"
-                      >
-                        关于
-                      </Link>
-                    </nav>
-                    <div className="h-4 w-[1px] bg-slate-200 dark:bg-slate-800" />
+                  <div className="flex w-full items-center justify-between gap-3 sm:w-auto sm:gap-4">
+                    <SiteNav />
+                    <div aria-hidden="true" className="hidden h-4 w-px bg-slate-200 sm:block dark:bg-slate-800" />
                     <ModeToggle />
                   </div>
                 </div>
@@ -80,7 +62,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
               <main>{children}</main>
 
               {/* 极简山庄页脚 */}
-              <footer className="mt-20 border-t border-slate-200/70 pt-8 pb-10 text-center text-xs text-slate-400 dark:border-slate-800/70 dark:text-slate-500">
+              <footer className="mt-16 border-t border-slate-200/70 pt-8 pb-16 text-center text-xs leading-6 text-slate-500 dark:border-slate-800/70 dark:text-slate-400">
                 <div className="flex items-center justify-center gap-2 mb-2 font-serif text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                   <span>雪落山庄</span>
                   <span className="opacity-40">·</span>

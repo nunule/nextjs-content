@@ -1,0 +1,2832 @@
+[
+  {
+    "file": "evidence/cities-beijing.json",
+    "http_status": "HTTP/1.1 200 OK",
+    "response_date": "Fri, 09 Oct 2026 11:01:23 GMT",
+    "shape": "array",
+    "record_count": 1,
+    "min_time_beijing": null,
+    "max_time_beijing": null,
+    "fields": {
+      "CityCode": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": 110000
+      },
+      "CityJC": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": "BJS"
+      },
+      "CityName": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": "北京市"
+      },
+      "Id": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": 1
+      },
+      "ProvinceId": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": 1
+      }
+    }
+  },
+  {
+    "file": "evidence/cities-day.json",
+    "http_status": "HTTP/1.1 200 OK",
+    "response_date": "Fri, 09 Oct 2026 11:00:57 GMT",
+    "shape": "array",
+    "record_count": 338,
+    "min_time_beijing": "2026-10-08T00:00:00+08:00",
+    "max_time_beijing": "2026-10-08T00:00:00+08:00",
+    "fields": {
+      "AQI": {
+        "types": [
+          "str"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": "80"
+      },
+      "AqiLevel": {
+        "types": [
+          "int"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": 2
+      },
+      "Area": {
+        "types": [
+          "str"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": "惠州市"
+      },
+      "COLevel": {
+        "types": [
+          "int"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": 1
+      },
+      "CityCode": {
+        "types": [
+          "int"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": 441300
+      },
+      "Id": {
+        "types": [
+          "int"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": 0
+      },
+      "Latitude": {
+        "types": [
+          "str"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": "22.909185714285714285714285714"
+      },
+      "Longitude": {
+        "types": [
+          "str"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": "114.47344285714285714285714286"
+      },
+      "Measure": {
+        "types": [
+          "str"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": "极少数异常敏感人群应减少户外活动"
+      },
+      "NO2Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": 1
+      },
+      "O3Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": 2
+      },
+      "PM10Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": 1
+      },
+      "PM2_5Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": 1
+      },
+      "PrimaryPollutant": {
+        "types": [
+          "str"
+        ],
+        "present_count": 338,
+        "missing_markers": {
+          "—": 66
+        },
+        "example": "臭氧8小时(O3_8h)"
+      },
+      "ProvinceId": {
+        "types": [
+          "int"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": 19
+      },
+      "Quality": {
+        "types": [
+          "str"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": "良"
+      },
+      "SO2Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": 1
+      },
+      "TimePoint": {
+        "types": [
+          "str"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": "2026-10-08T00:00:00"
+      },
+      "Unheathful": {
+        "types": [
+          "str"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": "空气质量可接受，但某些污染物可能对极少数异常敏感人群健康有较弱影响"
+      }
+    }
+  },
+  {
+    "file": "evidence/cities-live.json",
+    "http_status": "HTTP/1.1 200 OK",
+    "response_date": "Fri, 09 Oct 2026 11:00:57 GMT",
+    "shape": "array",
+    "record_count": 338,
+    "min_time_beijing": "2026-10-09T18:00:00+08:00",
+    "max_time_beijing": "2026-10-09T18:00:00+08:00",
+    "fields": {
+      "AQI": {
+        "types": [
+          "str"
+        ],
+        "present_count": 338,
+        "missing_markers": {
+          "NA": 1
+        },
+        "example": "40"
+      },
+      "AqiLevel": {
+        "types": [
+          "int"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": 1
+      },
+      "Area": {
+        "types": [
+          "str"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": "惠州市"
+      },
+      "COLevel": {
+        "types": [
+          "int"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": 1
+      },
+      "CityCode": {
+        "types": [
+          "int"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": 441300
+      },
+      "Id": {
+        "types": [
+          "int"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": 0
+      },
+      "Latitude": {
+        "types": [
+          "str"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": "22.909185714285714285714285714"
+      },
+      "Longitude": {
+        "types": [
+          "str"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": "114.47344285714285714285714286"
+      },
+      "Measure": {
+        "types": [
+          "str"
+        ],
+        "present_count": 338,
+        "missing_markers": {
+          "NA": 1
+        },
+        "example": "各类人群可正常活动"
+      },
+      "NO2Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": 1
+      },
+      "O3Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": 1
+      },
+      "PM10Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": 1
+      },
+      "PM2_5Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": 1
+      },
+      "PrimaryPollutant": {
+        "types": [
+          "str"
+        ],
+        "present_count": 338,
+        "missing_markers": {
+          "—": 180,
+          "NA": 1
+        },
+        "example": "—"
+      },
+      "ProvinceId": {
+        "types": [
+          "int"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": 19
+      },
+      "Quality": {
+        "types": [
+          "str"
+        ],
+        "present_count": 338,
+        "missing_markers": {
+          "NA": 1
+        },
+        "example": "优"
+      },
+      "SO2Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": 1
+      },
+      "TimePoint": {
+        "types": [
+          "str"
+        ],
+        "present_count": 338,
+        "missing_markers": {},
+        "example": "2026-10-09T18:00:00"
+      },
+      "Unheathful": {
+        "types": [
+          "str"
+        ],
+        "present_count": 338,
+        "missing_markers": {
+          "NA": 1
+        },
+        "example": "空气质量令人满意，基本无空气污染"
+      }
+    }
+  },
+  {
+    "file": "evidence/city-day-beijing-post.json",
+    "http_status": "HTTP/1.1 200 OK",
+    "response_date": "Fri, 09 Oct 2026 11:01:36 GMT",
+    "shape": "array",
+    "record_count": 14,
+    "min_time_beijing": "2026-09-25T00:00:00+08:00",
+    "max_time_beijing": "2026-10-08T00:00:00+08:00",
+    "fields": {
+      "AQI": {
+        "types": [
+          "str"
+        ],
+        "present_count": 14,
+        "missing_markers": {},
+        "example": "78"
+      },
+      "Area": {
+        "types": [
+          "str"
+        ],
+        "present_count": 14,
+        "missing_markers": {},
+        "example": "北京市"
+      },
+      "CO_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 14,
+        "missing_markers": {},
+        "example": "0.5"
+      },
+      "CityCode": {
+        "types": [
+          "int"
+        ],
+        "present_count": 14,
+        "missing_markers": {},
+        "example": 110000
+      },
+      "Id": {
+        "types": [
+          "int"
+        ],
+        "present_count": 14,
+        "missing_markers": {},
+        "example": 1869257
+      },
+      "Measure": {
+        "types": [
+          "str"
+        ],
+        "present_count": 14,
+        "missing_markers": {},
+        "example": "极少数异常敏感人群应减少户外活动"
+      },
+      "NO2_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 14,
+        "missing_markers": {},
+        "example": "27"
+      },
+      "O3_8h_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 14,
+        "missing_markers": {},
+        "example": "133"
+      },
+      "PM10_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 14,
+        "missing_markers": {},
+        "example": "53"
+      },
+      "PM2_5_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 14,
+        "missing_markers": {},
+        "example": "24"
+      },
+      "PrimaryPollutant": {
+        "types": [
+          "str"
+        ],
+        "present_count": 14,
+        "missing_markers": {
+          "—": 8
+        },
+        "example": "臭氧8小时(O3_8h)"
+      },
+      "Quality": {
+        "types": [
+          "str"
+        ],
+        "present_count": 14,
+        "missing_markers": {},
+        "example": "良"
+      },
+      "SO2_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 14,
+        "missing_markers": {},
+        "example": "4"
+      },
+      "TimePoint": {
+        "types": [
+          "str"
+        ],
+        "present_count": 14,
+        "missing_markers": {},
+        "example": "/Date(1791302400000)/"
+      },
+      "TimePointStr": {
+        "types": [
+          "str"
+        ],
+        "present_count": 14,
+        "missing_markers": {},
+        "example": "07日"
+      },
+      "Unheathful": {
+        "types": [
+          "str"
+        ],
+        "present_count": 14,
+        "missing_markers": {},
+        "example": "空气质量可接受，但某些污染物可能对极少数异常敏感人群健康有较弱影响"
+      }
+    }
+  },
+  {
+    "file": "evidence/city-detail-beijing.json",
+    "http_status": "HTTP/1.1 200 OK",
+    "response_date": "Fri, 09 Oct 2026 11:01:23 GMT",
+    "shape": "object",
+    "record_count": 1,
+    "min_time_beijing": "2026-10-09T18:00:00+08:00",
+    "max_time_beijing": "2026-10-09T18:00:00+08:00",
+    "fields": {
+      "AQI": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": "68"
+      },
+      "Area": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": "北京市"
+      },
+      "CO": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": "0.6"
+      },
+      "COLevel": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": 1
+      },
+      "CityCode": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": 110000
+      },
+      "Id": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": 9474560
+      },
+      "Measure": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": "极少数异常敏感人群应减少户外活动"
+      },
+      "NO2": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": "23"
+      },
+      "NO2Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": 1
+      },
+      "O3": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": "171"
+      },
+      "O3Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": 2
+      },
+      "PM10": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": "74"
+      },
+      "PM10Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": 2
+      },
+      "PM2_5": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": "36"
+      },
+      "PM2_5Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": 2
+      },
+      "PrimaryPollutant": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": "颗粒物(PM10)"
+      },
+      "Quality": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": "良"
+      },
+      "SO2": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": "4"
+      },
+      "SO2Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": 1
+      },
+      "TimePoint": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": "2026-10-09T18:00:00"
+      },
+      "Unheathful": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1,
+        "missing_markers": {},
+        "example": "空气质量可接受，但某些污染物可能对极少数异常敏感人群健康有较弱影响"
+      }
+    }
+  },
+  {
+    "file": "evidence/city-hour-beijing-post.json",
+    "http_status": "HTTP/1.1 200 OK",
+    "response_date": "Fri, 09 Oct 2026 11:01:36 GMT",
+    "shape": "array",
+    "record_count": 24,
+    "min_time_beijing": "2026-10-08T19:00:00+08:00",
+    "max_time_beijing": "2026-10-09T18:00:00+08:00",
+    "fields": {
+      "AQI": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "104"
+      },
+      "Area": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "北京市"
+      },
+      "CO": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "0.8"
+      },
+      "CityCode": {
+        "types": [
+          "int"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": 110000
+      },
+      "Id": {
+        "types": [
+          "int"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": 89709506
+      },
+      "Measure": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "青少年儿童、老年人及心血管系统疾病、呼吸系统疾病患者应减少长时间、高强度的户外锻炼"
+      },
+      "NO2": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "34"
+      },
+      "O3": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "159"
+      },
+      "PM10": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "121"
+      },
+      "PM2_5": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "64"
+      },
+      "PrimaryPollutant": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "细颗粒物(PM2.5)"
+      },
+      "Quality": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "轻度污染"
+      },
+      "SO2": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "5"
+      },
+      "TimePoint": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "/Date(1791457200000)/"
+      },
+      "TimePointStr": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "08日19时"
+      },
+      "Unheathful": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "敏感人群症状有轻度加剧，健康人群出现刺激症状"
+      }
+    }
+  },
+  {
+    "file": "evidence/city-stations-beijing.json",
+    "http_status": "HTTP/1.1 200 OK",
+    "response_date": "Fri, 09 Oct 2026 11:01:23 GMT",
+    "shape": "array",
+    "record_count": 23,
+    "min_time_beijing": "2026-10-09T18:00:00+08:00",
+    "max_time_beijing": "2026-10-09T18:00:00+08:00",
+    "fields": {
+      "AQI": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {
+          "NA": 1
+        },
+        "example": "79"
+      },
+      "Area": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "北京市"
+      },
+      "CO": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {
+          "NA": 1
+        },
+        "example": "0.5"
+      },
+      "COLevel": {
+        "types": [
+          "int"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": 0
+      },
+      "CO_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "0.8"
+      },
+      "CityCode": {
+        "types": [
+          "int"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": 0
+      },
+      "IsPublish": {
+        "types": [
+          "bool"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": false
+      },
+      "Latitude": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "39.8786"
+      },
+      "Longitude": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "116.3611"
+      },
+      "Measure": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {
+          "NA": 1
+        },
+        "example": "极少数异常敏感人群应减少户外活动"
+      },
+      "NO": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {
+          "NA": 23
+        },
+        "example": "NA"
+      },
+      "NO2": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {
+          "NA": 1
+        },
+        "example": "25"
+      },
+      "NO2Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": 0
+      },
+      "NO2_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "51"
+      },
+      "NO_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {
+          "NA": 23
+        },
+        "example": "NA"
+      },
+      "NOx": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {
+          "NA": 23
+        },
+        "example": "NA"
+      },
+      "NOx_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {
+          "NA": 23
+        },
+        "example": "NA"
+      },
+      "O3": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {
+          "NA": 1
+        },
+        "example": "183"
+      },
+      "O3Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": 0
+      },
+      "O3_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {
+          "NA": 1
+        },
+        "example": "183"
+      },
+      "O3_8h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "178"
+      },
+      "O3_8hLevel": {
+        "types": [
+          "int"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": 0
+      },
+      "O3_8h_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "178"
+      },
+      "OrderId": {
+        "types": [
+          "int"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": 1
+      },
+      "PM10": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {
+          "NA": 1
+        },
+        "example": "61"
+      },
+      "PM10Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": 0
+      },
+      "PM10_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "124"
+      },
+      "PM2_5": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {
+          "NA": 1
+        },
+        "example": "27"
+      },
+      "PM2_5Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": 0
+      },
+      "PM2_5_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "73"
+      },
+      "PositionName": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "万寿西宫"
+      },
+      "PrimaryPollutant": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {
+          "—": 2,
+          "NA": 1
+        },
+        "example": "臭氧1小时(O3_1h)"
+      },
+      "ProvinceId": {
+        "types": [
+          "int"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": 0
+      },
+      "Quality": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {
+          "NA": 1
+        },
+        "example": "良"
+      },
+      "SO2": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {
+          "NA": 1
+        },
+        "example": "4"
+      },
+      "SO2Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": 0
+      },
+      "SO2_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "4"
+      },
+      "StationCode": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "1001A"
+      },
+      "TimePoint": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "2026-10-09T18:00:00"
+      },
+      "TimePointStr": {
+        "types": [
+          "NoneType"
+        ],
+        "present_count": 23,
+        "missing_markers": {
+          "None": 23
+        },
+        "example": null
+      },
+      "Unheathful": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {
+          "NA": 1
+        },
+        "example": "空气质量可接受，但某些污染物可能对极少数异常敏感人群健康有较弱影响"
+      }
+    }
+  },
+  {
+    "file": "evidence/history-snapshot-23h.json",
+    "http_status": "HTTP/1.1 200 OK",
+    "response_date": "Fri, 09 Oct 2026 11:02:20 GMT",
+    "shape": "array",
+    "record_count": 1601,
+    "min_time_beijing": "2026-10-08T19:00:00+08:00",
+    "max_time_beijing": "2026-10-08T19:00:00+08:00",
+    "fields": {
+      "AQI": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 88
+        },
+        "example": "111"
+      },
+      "Area": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": "北京市"
+      },
+      "CO": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 31,
+          "/": 82
+        },
+        "example": "1.0"
+      },
+      "COLevel": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 1
+      },
+      "CO_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "/": 82,
+          "NA": 2
+        },
+        "example": "0.6"
+      },
+      "Id": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 450555451
+      },
+      "Latitude": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": "39.8786"
+      },
+      "Longitude": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": "116.3611"
+      },
+      "Measure": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 88
+        },
+        "example": "青少年儿童、老年人及心血管系统疾病、呼吸系统疾病患者应减少长时间、高强度的户外锻炼"
+      },
+      "NO2": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 38
+        },
+        "example": "42"
+      },
+      "NO2Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 1
+      },
+      "NO2_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 2
+        },
+        "example": "48"
+      },
+      "O3": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 10
+        },
+        "example": "184"
+      },
+      "O3Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 2
+      },
+      "O3_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 1601
+        },
+        "example": "NA"
+      },
+      "O3_8h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 3
+        },
+        "example": "195"
+      },
+      "O3_8hLevel": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 3
+      },
+      "O3_8h_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 10
+        },
+        "example": "195"
+      },
+      "PM10": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 61
+        },
+        "example": "148"
+      },
+      "PM10Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 3
+      },
+      "PM10_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 2
+        },
+        "example": "100"
+      },
+      "PM2_5": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 29
+        },
+        "example": "66"
+      },
+      "PM2_5Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 3
+      },
+      "PM2_5_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 3
+        },
+        "example": "52"
+      },
+      "PositionName": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": "万寿西宫"
+      },
+      "PrimaryPollutant": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 88,
+          "—": 673
+        },
+        "example": "颗粒物(PM10)"
+      },
+      "Quality": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 88
+        },
+        "example": "轻度污染"
+      },
+      "SO2": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "/": 56,
+          "NA": 26
+        },
+        "example": "5"
+      },
+      "SO2Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 1
+      },
+      "SO2_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "/": 56,
+          "NA": 2
+        },
+        "example": "4"
+      },
+      "StationCode": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": "1001A"
+      },
+      "TimePoint": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": "/Date(1791457200000)/"
+      },
+      "TimePointStr": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": "2026年10月08日 19时"
+      },
+      "Unheathful": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 88
+        },
+        "example": "敏感人群症状有轻度加剧，健康人群出现刺激症状"
+      }
+    }
+  },
+  {
+    "file": "evidence/history-snapshot-24h.json",
+    "http_status": "HTTP/1.1 200 OK",
+    "response_date": "Fri, 09 Oct 2026 11:02:21 GMT",
+    "shape": "array",
+    "record_count": 0,
+    "min_time_beijing": null,
+    "max_time_beijing": null,
+    "fields": {}
+  },
+  {
+    "file": "evidence/history-snapshot-48h.json",
+    "http_status": "HTTP/1.1 200 OK",
+    "response_date": "Fri, 09 Oct 2026 11:02:01 GMT",
+    "shape": "array",
+    "record_count": 0,
+    "min_time_beijing": null,
+    "max_time_beijing": null,
+    "fields": {}
+  },
+  {
+    "file": "evidence/history-snapshot-latest.json",
+    "http_status": "HTTP/1.1 200 OK",
+    "response_date": "Fri, 09 Oct 2026 11:02:01 GMT",
+    "shape": "array",
+    "record_count": 1601,
+    "min_time_beijing": "2026-10-09T18:00:00+08:00",
+    "max_time_beijing": "2026-10-09T18:00:00+08:00",
+    "fields": {
+      "AQI": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 69
+        },
+        "example": "79"
+      },
+      "Area": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": "北京市"
+      },
+      "CO": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "/": 82,
+          "NA": 15
+        },
+        "example": "0.5"
+      },
+      "COLevel": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 1
+      },
+      "CO_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "/": 82,
+          "NA": 1
+        },
+        "example": "0.8"
+      },
+      "Id": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 450893486
+      },
+      "Latitude": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": "39.8786"
+      },
+      "Longitude": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": "116.3611"
+      },
+      "Measure": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 69
+        },
+        "example": "极少数异常敏感人群应减少户外活动"
+      },
+      "NO2": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 32
+        },
+        "example": "25"
+      },
+      "NO2Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 1
+      },
+      "NO2_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 2
+        },
+        "example": "51"
+      },
+      "O3": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 7
+        },
+        "example": "183"
+      },
+      "O3Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 2
+      },
+      "O3_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 1601
+        },
+        "example": "NA"
+      },
+      "O3_8h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 4
+        },
+        "example": "178"
+      },
+      "O3_8hLevel": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 3
+      },
+      "O3_8h_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 8
+        },
+        "example": "178"
+      },
+      "PM10": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 68
+        },
+        "example": "61"
+      },
+      "PM10Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 2
+      },
+      "PM10_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 1
+        },
+        "example": "124"
+      },
+      "PM2_5": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 25
+        },
+        "example": "27"
+      },
+      "PM2_5Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 1
+      },
+      "PM2_5_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 2
+        },
+        "example": "73"
+      },
+      "PositionName": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": "万寿西宫"
+      },
+      "PrimaryPollutant": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "—": 721,
+          "NA": 69
+        },
+        "example": "臭氧1小时(O3_1h)"
+      },
+      "Quality": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 69
+        },
+        "example": "良"
+      },
+      "SO2": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "/": 56,
+          "NA": 30
+        },
+        "example": "4"
+      },
+      "SO2Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 1
+      },
+      "SO2_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "/": 56,
+          "NA": 1
+        },
+        "example": "4"
+      },
+      "StationCode": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": "1001A"
+      },
+      "TimePoint": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": "/Date(1791540000000)/"
+      },
+      "TimePointStr": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": "2026年10月09日 18时"
+      },
+      "Unheathful": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 69
+        },
+        "example": "空气质量可接受，但某些污染物可能对极少数异常敏感人群健康有较弱影响"
+      }
+    }
+  },
+  {
+    "file": "evidence/history-snapshot-month.json",
+    "http_status": "HTTP/1.1 200 OK",
+    "response_date": "Fri, 09 Oct 2026 11:02:01 GMT",
+    "shape": "array",
+    "record_count": 0,
+    "min_time_beijing": null,
+    "max_time_beijing": null,
+    "fields": {}
+  },
+  {
+    "file": "evidence/history-snapshot-year.json",
+    "http_status": "HTTP/1.1 200 OK",
+    "response_date": "Fri, 09 Oct 2026 11:02:00 GMT",
+    "shape": "array",
+    "record_count": 0,
+    "min_time_beijing": null,
+    "max_time_beijing": null,
+    "fields": {}
+  },
+  {
+    "file": "evidence/provinces.json",
+    "http_status": "HTTP/1.1 200 OK",
+    "response_date": "Fri, 09 Oct 2026 11:00:57 GMT",
+    "shape": "array",
+    "record_count": 34,
+    "min_time_beijing": null,
+    "max_time_beijing": null,
+    "fields": {
+      "Id": {
+        "types": [
+          "int"
+        ],
+        "present_count": 34,
+        "missing_markers": {},
+        "example": 1
+      },
+      "ProvinceCode": {
+        "types": [
+          "int"
+        ],
+        "present_count": 34,
+        "missing_markers": {},
+        "example": 110000
+      },
+      "ProvinceJC": {
+        "types": [
+          "str"
+        ],
+        "present_count": 34,
+        "missing_markers": {},
+        "example": "BJ"
+      },
+      "ProvinceName": {
+        "types": [
+          "str"
+        ],
+        "present_count": 34,
+        "missing_markers": {},
+        "example": "北京"
+      }
+    }
+  },
+  {
+    "file": "evidence/station-hour-1001A.json",
+    "http_status": "HTTP/1.1 200 OK",
+    "response_date": "Fri, 09 Oct 2026 11:01:36 GMT",
+    "shape": "array",
+    "record_count": 24,
+    "min_time_beijing": "2026-10-08T19:00:00+08:00",
+    "max_time_beijing": "2026-10-09T18:00:00+08:00",
+    "fields": {
+      "AQI": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "111"
+      },
+      "Area": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "北京市"
+      },
+      "CO": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "1.0"
+      },
+      "COLevel": {
+        "types": [
+          "int"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": 1
+      },
+      "CO_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "0.6"
+      },
+      "Id": {
+        "types": [
+          "int"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": 450555451
+      },
+      "Latitude": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "39.8786"
+      },
+      "Longitude": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "116.3611"
+      },
+      "Measure": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "青少年儿童、老年人及心血管系统疾病、呼吸系统疾病患者应减少长时间、高强度的户外锻炼"
+      },
+      "NO2": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "42"
+      },
+      "NO2Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": 1
+      },
+      "NO2_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "48"
+      },
+      "O3": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "184"
+      },
+      "O3Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": 2
+      },
+      "O3_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {
+          "NA": 24
+        },
+        "example": "NA"
+      },
+      "O3_8h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {
+          "NA": 7
+        },
+        "example": "195"
+      },
+      "O3_8hLevel": {
+        "types": [
+          "int"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": 3
+      },
+      "O3_8h_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {
+          "NA": 7
+        },
+        "example": "195"
+      },
+      "PM10": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "148"
+      },
+      "PM10Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": 3
+      },
+      "PM10_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {
+          "": 24
+        },
+        "example": ""
+      },
+      "PM2_5": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "66"
+      },
+      "PM2_5Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": 3
+      },
+      "PM2_5_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {
+          "": 24
+        },
+        "example": ""
+      },
+      "PositionName": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "万寿西宫"
+      },
+      "PrimaryPollutant": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "颗粒物(PM10)"
+      },
+      "Quality": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "轻度污染"
+      },
+      "SO2": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "5"
+      },
+      "SO2Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": 1
+      },
+      "SO2_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "4"
+      },
+      "StationCode": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "1001A"
+      },
+      "TimePoint": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "/Date(1791457200000)/"
+      },
+      "TimePointStr": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "08日19时"
+      },
+      "Unheathful": {
+        "types": [
+          "str"
+        ],
+        "present_count": 24,
+        "missing_markers": {},
+        "example": "敏感人群症状有轻度加剧，健康人群出现刺激症状"
+      }
+    }
+  },
+  {
+    "file": "evidence/station-iaqi-1001A.json",
+    "http_status": "HTTP/1.1 200 OK",
+    "response_date": "Fri, 09 Oct 2026 11:01:36 GMT",
+    "shape": "array",
+    "record_count": 23,
+    "min_time_beijing": "2026-10-08T20:00:00+08:00",
+    "max_time_beijing": "2026-10-09T18:00:00+08:00",
+    "fields": {
+      "Area": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "北京市"
+      },
+      "COLevel": {
+        "types": [
+          "int"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": 1
+      },
+      "ICO": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "5"
+      },
+      "INO2": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "13"
+      },
+      "IO3": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "79"
+      },
+      "IO3_8h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {
+          "NA": 23
+        },
+        "example": "NA"
+      },
+      "IPM10": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "58"
+      },
+      "IPM2_5": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "39"
+      },
+      "ISO2": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "2"
+      },
+      "Id": {
+        "types": [
+          "int"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": 438613498
+      },
+      "Latitude": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "39.8786"
+      },
+      "Longitude": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "116.3611"
+      },
+      "NO2Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": 1
+      },
+      "O3Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": 2
+      },
+      "O3_8hLevel": {
+        "types": [
+          "int"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": 0
+      },
+      "PM10Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": 2
+      },
+      "PM2_5Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": 1
+      },
+      "PositionName": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "万寿西宫"
+      },
+      "SO2Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": 1
+      },
+      "StationCode": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "1001A"
+      },
+      "TimePoint": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "/Date(1791540000000)/"
+      },
+      "TimePointStr": {
+        "types": [
+          "str"
+        ],
+        "present_count": 23,
+        "missing_markers": {},
+        "example": "09日18时"
+      }
+    }
+  },
+  {
+    "file": "evidence/stations-live-post.json",
+    "http_status": "HTTP/1.1 200 OK",
+    "response_date": "Fri, 09 Oct 2026 11:01:36 GMT",
+    "shape": "array",
+    "record_count": 1601,
+    "min_time_beijing": "2026-10-09T18:00:00+08:00",
+    "max_time_beijing": "2026-10-09T18:00:00+08:00",
+    "fields": {
+      "AQI": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 69
+        },
+        "example": "29"
+      },
+      "Area": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": "阿坝藏族羌族自治州"
+      },
+      "CO": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "/": 82,
+          "NA": 15
+        },
+        "example": "0.4"
+      },
+      "COLevel": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 1
+      },
+      "CO_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "/": 82,
+          "NA": 1
+        },
+        "example": "0.4"
+      },
+      "CityCode": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 513200
+      },
+      "IsPublish": {
+        "types": [
+          "bool"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": false
+      },
+      "Latitude": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": "31.8896"
+      },
+      "Longitude": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": "102.2503"
+      },
+      "Measure": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 69
+        },
+        "example": "各类人群可正常活动"
+      },
+      "NO": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 1601
+        },
+        "example": "NA"
+      },
+      "NO2": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 32
+        },
+        "example": "7"
+      },
+      "NO2Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 1
+      },
+      "NO2_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 2
+        },
+        "example": "6"
+      },
+      "NO_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 1601
+        },
+        "example": "NA"
+      },
+      "NOx": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 1601
+        },
+        "example": "NA"
+      },
+      "NOx_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 1601
+        },
+        "example": "NA"
+      },
+      "O3": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 7
+        },
+        "example": "66"
+      },
+      "O3Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 1
+      },
+      "O3_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 7
+        },
+        "example": "66"
+      },
+      "O3_8h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 4
+        },
+        "example": "61"
+      },
+      "O3_8hLevel": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 1
+      },
+      "O3_8h_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 8
+        },
+        "example": "61"
+      },
+      "OrderId": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 1
+      },
+      "PM10": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 68
+        },
+        "example": "29"
+      },
+      "PM10Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 1
+      },
+      "PM10_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 1
+        },
+        "example": "26"
+      },
+      "PM2_5": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 25
+        },
+        "example": "10"
+      },
+      "PM2_5Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 1
+      },
+      "PM2_5_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 2
+        },
+        "example": "8"
+      },
+      "PositionName": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": "马师校"
+      },
+      "PrimaryPollutant": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "—": 721,
+          "NA": 69
+        },
+        "example": "—"
+      },
+      "ProvinceId": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 23
+      },
+      "Quality": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 69
+        },
+        "example": "优"
+      },
+      "SO2": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 30,
+          "/": 56
+        },
+        "example": "4"
+      },
+      "SO2Level": {
+        "types": [
+          "int"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": 1
+      },
+      "SO2_24h": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "/": 56,
+          "NA": 1
+        },
+        "example": "4"
+      },
+      "StationCode": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": "2568A"
+      },
+      "TimePoint": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": "/Date(1791540000000)/"
+      },
+      "TimePointStr": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {},
+        "example": "2026年10月09日 18时"
+      },
+      "Unheathful": {
+        "types": [
+          "str"
+        ],
+        "present_count": 1601,
+        "missing_markers": {
+          "NA": 69
+        },
+        "example": "空气质量令人满意，基本无空气污染"
+      }
+    }
+  }
+]

@@ -1,0 +1,236 @@
+{
+  "base_url": "https://air.cnemc.cn:18007",
+  "audit_date": "2026-10-09",
+  "timezone": "Asia/Shanghai",
+  "scope": "三个可见数据页面的前端调用；非服务端所有路由穷举",
+  "endpoints": [
+    {
+      "id": "provinces",
+      "frontend_method": "GET",
+      "verified_method": "GET",
+      "path": "/CityData/GetProvince",
+      "example_parameters": {},
+      "parameter_location": "query string",
+      "purpose": "省份字典",
+      "sample_file": "evidence/provinces.json",
+      "headers_file": "evidence/provinces.headers.txt",
+      "frontend_source": "evidence/TDMap.js:528",
+      "authentication": "本次未使用 Cookie、登录或 API Key；不代表公开 API 服务承诺"
+    },
+    {
+      "id": "cities",
+      "frontend_method": "GET",
+      "verified_method": "GET",
+      "path": "/CityData/GetCitiesByPid",
+      "example_parameters": {
+        "pid": 1
+      },
+      "parameter_location": "query string",
+      "purpose": "省份下城市字典；pid 为省份 Id",
+      "sample_file": "evidence/cities-beijing.json",
+      "headers_file": "evidence/cities-beijing.headers.txt",
+      "frontend_source": "evidence/TDMap.js:560",
+      "authentication": "本次未使用 Cookie、登录或 API Key；不代表公开 API 服务承诺"
+    },
+    {
+      "id": "cities_live",
+      "frontend_method": "GET",
+      "verified_method": "GET",
+      "path": "/CityData/GetAllCityRealTimeAQIModels",
+      "example_parameters": {},
+      "parameter_location": "query string",
+      "purpose": "全国城市最新小时 AQI 概览；无六项污染物浓度",
+      "sample_file": "evidence/cities-live.json",
+      "headers_file": "evidence/cities-live.headers.txt",
+      "frontend_source": "evidence/TDMap.js:322",
+      "authentication": "本次未使用 Cookie、登录或 API Key；不代表公开 API 服务承诺"
+    },
+    {
+      "id": "cities_day",
+      "frontend_method": "GET",
+      "verified_method": "GET",
+      "path": "/CityData/GetAllCityDayAQIModels",
+      "example_parameters": {},
+      "parameter_location": "query string",
+      "purpose": "全国城市最新日报 AQI 概览；无六项污染物浓度",
+      "sample_file": "evidence/cities-day.json",
+      "headers_file": "evidence/cities-day.headers.txt",
+      "frontend_source": "evidence/TDMap.js:322",
+      "authentication": "本次未使用 Cookie、登录或 API Key；不代表公开 API 服务承诺"
+    },
+    {
+      "id": "city_detail",
+      "frontend_method": "POST",
+      "verified_method": "GET",
+      "path": "/CityData/GetAQIDataPublishLiveInfo",
+      "example_parameters": {
+        "cityCode": 110000
+      },
+      "parameter_location": "query string",
+      "purpose": "单城市最新小时浓度与 AQI；本次使用 GET 验证成功",
+      "sample_file": "evidence/city-detail-beijing.json",
+      "headers_file": "evidence/city-detail-beijing.headers.txt",
+      "frontend_source": "evidence/TDMap.js:642",
+      "authentication": "本次未使用 Cookie、登录或 API Key；不代表公开 API 服务承诺"
+    },
+    {
+      "id": "city_stations",
+      "frontend_method": "GET",
+      "verified_method": "GET",
+      "path": "/CityData/GetAQIDataPublishLive",
+      "example_parameters": {
+        "cityName": "北京市"
+      },
+      "parameter_location": "query string",
+      "purpose": "单城市下各监测点最新浓度与 AQI",
+      "sample_file": "evidence/city-stations-beijing.json",
+      "headers_file": "evidence/city-stations-beijing.headers.txt",
+      "frontend_source": "evidence/TDMap.js:604",
+      "authentication": "本次未使用 Cookie、登录或 API Key；不代表公开 API 服务承诺"
+    },
+    {
+      "id": "stations_live",
+      "frontend_method": "POST",
+      "verified_method": "POST",
+      "path": "/HourChangesPublish/GetAllAQIPublishLive",
+      "example_parameters": {},
+      "parameter_location": "query string",
+      "purpose": "全国点位最新小时浓度与 AQI",
+      "sample_file": "evidence/stations-live-post.json",
+      "headers_file": "evidence/stations-live-post.headers.txt",
+      "frontend_source": "evidence/TDMap2.js:315",
+      "authentication": "本次未使用 Cookie、登录或 API Key；不代表公开 API 服务承诺"
+    },
+    {
+      "id": "city_hour",
+      "frontend_method": "POST",
+      "verified_method": "POST",
+      "path": "/HourChangesPublish/GetCityRealTimeAqiHistoryByCondition",
+      "example_parameters": {
+        "citycode": 110000
+      },
+      "parameter_location": "query string",
+      "purpose": "单城市最近24小时浓度与 AQI",
+      "sample_file": "evidence/city-hour-beijing-post.json",
+      "headers_file": "evidence/city-hour-beijing-post.headers.txt",
+      "frontend_source": "evidence/TDMap.js:423",
+      "authentication": "本次未使用 Cookie、登录或 API Key；不代表公开 API 服务承诺"
+    },
+    {
+      "id": "city_day",
+      "frontend_method": "POST",
+      "verified_method": "POST",
+      "path": "/HourChangesPublish/GetCityDayAqiHistoryByCondition",
+      "example_parameters": {
+        "citycode": 110000
+      },
+      "parameter_location": "query string",
+      "purpose": "单城市最近14天日报浓度与 AQI",
+      "sample_file": "evidence/city-day-beijing-post.json",
+      "headers_file": "evidence/city-day-beijing-post.headers.txt",
+      "frontend_source": "evidence/TDMap.js:424",
+      "authentication": "本次未使用 Cookie、登录或 API Key；不代表公开 API 服务承诺"
+    },
+    {
+      "id": "station_hour",
+      "frontend_method": "POST",
+      "verified_method": "POST",
+      "path": "/HourChangesPublish/GetAqiHistoryByCondition",
+      "example_parameters": {
+        "stationCode": "1001A"
+      },
+      "parameter_location": "query string",
+      "purpose": "单点位最近24小时浓度与 AQI",
+      "sample_file": "evidence/station-hour-1001A.json",
+      "headers_file": "evidence/station-hour-1001A.headers.txt",
+      "frontend_source": "evidence/TDMap2.js:418",
+      "authentication": "本次未使用 Cookie、登录或 API Key；不代表公开 API 服务承诺"
+    },
+    {
+      "id": "station_iaqi",
+      "frontend_method": "POST",
+      "verified_method": "POST",
+      "path": "/HourChangesPublish/GetIAqiHistoryByCondition",
+      "example_parameters": {
+        "stationCode": "1001A"
+      },
+      "parameter_location": "query string",
+      "purpose": "单点位近期污染物分指数 IAQI；本次23条",
+      "sample_file": "evidence/station-iaqi-1001A.json",
+      "headers_file": "evidence/station-iaqi-1001A.headers.txt",
+      "frontend_source": "evidence/TDMap2.js:419",
+      "authentication": "本次未使用 Cookie、登录或 API Key；不代表公开 API 服务承诺"
+    },
+    {
+      "id": "stations_at_hour",
+      "frontend_method": "POST",
+      "verified_method": "POST",
+      "path": "/HourChangesPublish/GetAQIHistoryByConditionHis",
+      "example_parameters": {
+        "date": "2026-10-09 18:00:00"
+      },
+      "parameter_location": "form-urlencoded body",
+      "purpose": "指定小时全国点位快照；仅验证到近期窗口",
+      "sample_file": "evidence/history-snapshot-latest.json",
+      "headers_file": "evidence/history-snapshot-latest.headers.txt",
+      "frontend_source": "evidence/TDMap3.js:317",
+      "authentication": "本次未使用 Cookie、登录或 API Key；不代表公开 API 服务承诺"
+    }
+  ],
+  "history_probes": [
+    {
+      "method": "POST",
+      "path": "/HourChangesPublish/GetAQIHistoryByConditionHis",
+      "form": {
+        "date": "2026-10-09 18:00:00"
+      },
+      "sample_file": "evidence/history-snapshot-latest.json",
+      "headers_file": "evidence/history-snapshot-latest.headers.txt"
+    },
+    {
+      "method": "POST",
+      "path": "/HourChangesPublish/GetAQIHistoryByConditionHis",
+      "form": {
+        "date": "2026-10-07 18:00:00"
+      },
+      "sample_file": "evidence/history-snapshot-48h.json",
+      "headers_file": "evidence/history-snapshot-48h.headers.txt"
+    },
+    {
+      "method": "POST",
+      "path": "/HourChangesPublish/GetAQIHistoryByConditionHis",
+      "form": {
+        "date": "2026-09-09 18:00:00"
+      },
+      "sample_file": "evidence/history-snapshot-month.json",
+      "headers_file": "evidence/history-snapshot-month.headers.txt"
+    },
+    {
+      "method": "POST",
+      "path": "/HourChangesPublish/GetAQIHistoryByConditionHis",
+      "form": {
+        "date": "2025-10-09 18:00:00"
+      },
+      "sample_file": "evidence/history-snapshot-year.json",
+      "headers_file": "evidence/history-snapshot-year.headers.txt"
+    },
+    {
+      "method": "POST",
+      "path": "/HourChangesPublish/GetAQIHistoryByConditionHis",
+      "form": {
+        "date": "2026-10-08 19:00:00"
+      },
+      "sample_file": "evidence/history-snapshot-23h.json",
+      "headers_file": "evidence/history-snapshot-23h.headers.txt"
+    },
+    {
+      "method": "POST",
+      "path": "/HourChangesPublish/GetAQIHistoryByConditionHis",
+      "form": {
+        "date": "2026-10-08 18:00:00"
+      },
+      "sample_file": "evidence/history-snapshot-24h.json",
+      "headers_file": "evidence/history-snapshot-24h.headers.txt"
+    }
+  ]
+}

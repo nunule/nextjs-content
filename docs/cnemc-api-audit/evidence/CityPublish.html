@@ -1,0 +1,280 @@
+
+
+<style>
+    .map-aqi-box {
+        display: flex;
+        width: 368px;
+        height: 24px;
+    }
+        .map-aqi-box > div {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            white-space: nowrap;
+            font-size: 12px;
+            font-weight: bold;
+            color: #ffffff;
+            border: 1px solid rgba(0,0,0,.4);
+            border-left: none;
+        }
+         /*   .map-aqi-box > div:nth-child(3), .map-aqi-box > div:last-child {
+                color: #333;
+            }*/
+            .map-aqi-box > div:first-child {
+                color: #333;
+                border-left: 1px solid rgba(0,0,0,.4);
+            }
+</style>
+<div class="left-panel">
+    <div class="left-top-panel card-panel">
+        <div id="map-container" style="width: 100%; height: 100%; z-index: 1;"></div>
+        
+        <div class="map-tab-group">
+            <div _data="hour" class="time-btn active aqi-time">AQI实时报</div>
+            <div _data="day" class="time-btn aqi-date">AQI日报</div>
+        </div>
+        
+        <div class="map-search">
+            <div class="icon-city"></div>
+            <input id="city-search" type="text" placeholder="搜索城市" />
+            <div class="icon-search"></div>
+            <div class="icon-search icon-close"></div>
+            <ul id="search-list" style="display: none;"></ul>
+        </div>
+        
+    <div class="map-legend">
+        <p class="legend-text text-active"> 城市AQI实时报</p>
+        <p class="legend-text"> 城市AQI日报</p>
+        <p class="map-time"></p>
+        <div class="map-aqi-box">
+            <div class="bg-1">优</div>
+            <div class="bg-2">良</div>
+            <div class="bg-3">轻度污染</div>
+            <div class="bg-4">中度污染</div>
+            <div class="bg-5">重度污染</div>
+            <div class="bg-6">严重污染</div>
+            <div class="bg-0">无数据</div>
+        </div>
+        
+    </div>
+        
+        <button type="button" class="btn-top btn-panel-refresh">
+            <img src="/Content/images/icon-refresh.png" />
+            刷新
+        </button>
+    </div>
+
+    
+    <div class="left-bottom-panel card-panel">
+        <h3 class="panel-title no-btn">
+            <strong id="chart-city">北京市</strong>
+            <span><span id="chart-title">过去24小时</span> <span>城市AQI 变化情况</span></span>
+        </h3>
+        <div id="pollutantChart" style="width: 100%; height: 200px;"></div>
+        
+    </div>
+    
+    <div class="coll-btn">
+        <img src="/Content/images/icon-drop.png" />
+    </div>
+</div>
+
+
+<div class="right-panel">
+    <div class="card-panel flex-box">
+        
+        <div class="aqi-panel">
+            <div class="aqi-panel-title">
+                <img src="/Content/images/title-icon-site.png" />
+                <span class="data-area">北京</span>
+                <div class="aqi-panel-time"><span class="data-timepoint"></span> 更新</div>
+            </div>
+            <div class="aqi-content">
+                <div class="aqi-box">
+                    <div class="aqi-content-left">
+                        <!-- 左边环 -->
+                        <div class="circle-progress">
+                            <div id="pieCanvas" style="width:100%;height: 150px;"></div>
+                            <div class="circle-progress-text">
+                                <div class="circle-progress-aqi">AQI指数</div>
+                                <div class="circle-progress-value data-aqi" id="Progress_value"></div>
+                                <div class="aqi-label bg-0"><span class="font data-quality"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="aqi-content-right">
+                        <div class="poll-item-wrap">
+                            <ul class="clearfix">
+                                <li class="clearfix">
+                                    <div class="poll-name">PM<sub>2.5</sub></div>
+                                    <div class="poll-level">
+                                        <div class="poll-level-top clearfix">
+                                            <span class="data-pm25"></span>
+                                            <span>μg/m<sup>3</sup></span>
+                                        </div>
+
+                                        <div class="poll-level-bottom">
+                                            <p class="poll-bar bg- data-pm25-bar" style="width: 10%"></p>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li class="clearfix">
+                                    <div class="poll-name">PM<sub>10</sub></div>
+                                    <div class="poll-level">
+                                        <div class="poll-level-top clearfix">
+                                            <span class="data-pm10"></span>
+                                            <span>μg/m<sup>3</sup></span>
+                                        </div>
+
+                                        <div class="poll-level-bottom">
+                                            <p class="poll-bar bg- data-pm10-bar" style="width: 20%"></p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="clearfix">
+                                    <div class="poll-name">SO<sub>2</sub></div>
+                                    <div class="poll-level">
+                                        <div class="poll-level-top clearfix">
+                                            <span class="data-so2"></span>
+                                            <span>μg/m<sup>3</sup></span>
+                                        </div>
+
+                                        <div class="poll-level-bottom">
+                                            <p class="poll-bar bg- data-so2-bar" style="width: 10%"></p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="clearfix">
+                                    <div class="poll-name">NO<sub>2</sub></div>
+                                    <div class="poll-level">
+                                        <div class="poll-level-top clearfix">
+                                            <span class="data-no2"></span>
+                                            <span>μg/m<sup>3</sup></span>
+                                        </div>
+
+                                        <div class="poll-level-bottom">
+                                            <p class="poll-bar bg- data-no2-bar" style="width: 30%"></p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="clearfix">
+                                    <div class="poll-name">CO</div>
+                                    <div class="poll-level">
+                                        <div class="poll-level-top clearfix">
+                                            <span class="data-co"></span>
+                                            <span>mg/m<sup>3</sup></span>
+                                        </div>
+
+                                        <div class="poll-level-bottom">
+                                            <p class="poll-bar bg- data-co-bar" style="width: 10%"></p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="clearfix">
+                                    <div class="poll-name">O<sub>3</sub></div>
+                                    <div class="poll-level">
+                                        <div class="poll-level-top clearfix">
+                                            <span class="data-o3"></span>
+                                            <span>μg/m<sup>3</sup></span>
+                                        </div>
+
+                                        <div class="poll-level-bottom">
+                                            <p class="poll-bar bg- data-o3-bar" style="width: 36%"></p>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="home-health clearfix">
+                    <label>
+                        <img src="/Content/images/home-health.png" />
+                    </label>
+                    <div class="home-health-content">
+                        <ul id="marquee1" class="marquee">
+                            <li>
+                                <span>健康影响:</span><span class="data-heath"></span>
+                            </li>
+                        </ul>
+                        <!-- <p>健康影响:易感染人群症状有轻度加剧，健康人群出现刺激症状</p> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="panel-box">
+            <h3 class="panel-box-title">
+                <img src="/Content/images/title-icon-province.png" />
+                <span>省份信息</span>
+                <button class="btn-link" type="button" id="nation">
+                    <img src="/Content/images/icon-back.png" />
+                    <span>返回全国</span>
+                </button>
+            </h3>
+            <div class="panel-box-centent">
+                <ul id="province-list" class="area-list clearfix"></ul>
+            </div>
+            <h3 class="panel-box-title no-bg">
+                <img src="/Content/images/title-icon-city.png" />
+                <span>城市信息</span>
+            </h3>
+            <div class="panel-box-centent">
+                <ul id="city-list" class="area-list city-list clearfix" style="min-height: 72px;"></ul>
+            </div>
+        </div>
+        <div class="panel-box panel-box-list">
+            <h3 class="panel-box-title">
+                <img src="/Content/images/title-icon-time.png" />
+                <span>实时监测数据</span>
+                <i>（单位：μg/m<sup>3</sup>; CO为mg/m<sup>3</sup>）</i>
+            </h3>
+            <div class="panel-box-centent">
+                <ul class="list-th">
+                    <li>点位</li>
+                    <li>AQI</li>
+                    <li>PM<sub>2.5</sub></li>
+                    <li>PM<sub>10</sub></li>
+                    <li>SO<sub>2</sub></li>
+                    <li>NO<sub>2</sub></li>
+                    <li>CO</li>
+                    <li>O<sub>3</sub></li>
+                </ul>
+                <ul class="list-tr city-station-list" id="station-list">
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/Content/Scripts/Map/TDMap.js"></script>
+<script src="/Content/Scripts/jquery.marquee.js"></script>
+<!-- 环 -->
+<script src="/Content/Scripts/CircularProgressBar.js"></script>
+<script src="/Content/Scripts/AQITool.js"></script>
+<script type="text/javascript">
+    var circularProgressBar = new CircularProgressBar("pieCanvas");
+    $(function () {
+
+        //地图选项切换
+        $(".map-tab-group > div").click(function () {
+            $(this).siblings().removeClass("active");
+            $(this).addClass("active");
+        })
+        //左边图表折叠
+        $(".coll-btn").click(function () {
+            $(".left-top-panel").toggleClass("left-top-panel-coll");
+            $(".left-bottom-panel").toggleClass("left-bottom-panel-coll");
+            $(this).toggleClass("coll-btn-coll");
+            setTimeout(function () {
+                window.dispatchEvent(new Event('resize'))
+            }, 200)
+        })
+        //健康指引滚动
+        //$("#marquee1").marquee();
+
+    })
+</script>

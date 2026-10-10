@@ -1,0 +1,256 @@
+{
+  "audit_date": "2026-10-09",
+  "timezone": "Asia/Shanghai",
+  "files": [
+    {
+      "file": "evidence/About.html",
+      "bytes": 11631,
+      "sha256": "fbc9fe3440d4c53ffc0d053da788b5dfb56ecba32d702843e8eb1faf5ded6e8a"
+    },
+    {
+      "file": "evidence/CityPublish.html",
+      "bytes": 12494,
+      "sha256": "3cc04c66af3201c20634057ba1a9f995beef1bb635e107fe1d3ec19ce392fad3"
+    },
+    {
+      "file": "evidence/HourChangesPublish.html",
+      "bytes": 3530,
+      "sha256": "549174fe663127e36454cde96f038059bbbc7a0b195d5662134494933cf8b031"
+    },
+    {
+      "file": "evidence/StationPublish.html",
+      "bytes": 13173,
+      "sha256": "1e24fe6aa1630bf8f9ad9c136f23496bc5d40e05a7a72a0835d6b8dbcd9900c1"
+    },
+    {
+      "file": "evidence/TDMap.js",
+      "bytes": 31164,
+      "sha256": "f7df3ec7cb3f58636600bcb71f4c68549ed1cba754ca03fae9469af490cf0e69"
+    },
+    {
+      "file": "evidence/TDMap2.js",
+      "bytes": 32936,
+      "sha256": "c56273318caf0ae98472f8428c2aea0e708d9b6d774fac78d85effaedc152eb9"
+    },
+    {
+      "file": "evidence/TDMap3.js",
+      "bytes": 21227,
+      "sha256": "2cf3192b78680398046b7bfb3e8cca53f7a6996b05611255584a4f7bc6cd29ea"
+    },
+    {
+      "file": "evidence/cities-beijing.headers.txt",
+      "bytes": 277,
+      "sha256": "b7f4f41a3a90dfc21d7f607fd83d5ba41599ab74929baa9f7b1b1695d7677e8b"
+    },
+    {
+      "file": "evidence/cities-beijing.json",
+      "bytes": 81,
+      "sha256": "442b634fae77f45bfd8d78931e6e0a497e591fb9380b24563182ced444b93fee"
+    },
+    {
+      "file": "evidence/cities-day.headers.txt",
+      "bytes": 281,
+      "sha256": "4c6972b982880fb8969a69f2fd91f092eac5462fe07024a0f7c17de0c2dea182"
+    },
+    {
+      "file": "evidence/cities-day.json",
+      "bytes": 164272,
+      "sha256": "87ca71c4219c91b09fbf68d653921c0118de2da2a44f69ddbf6e34c7f0ec700c"
+    },
+    {
+      "file": "evidence/cities-live.headers.txt",
+      "bytes": 281,
+      "sha256": "bd5c1c8e1d97277c22ea1d2a9c8de0ab5dc0de761c74f595df9f5b735d2afb19"
+    },
+    {
+      "file": "evidence/cities-live.json",
+      "bytes": 151067,
+      "sha256": "3c7539b4a7693c6f5c65ad8464c58f25d96d2821ca159041ccfaec3148028a88"
+    },
+    {
+      "file": "evidence/city-day-beijing-post.headers.txt",
+      "bytes": 279,
+      "sha256": "2fc239ca9adf8ef8d7709f7714a965602754b5dff2bd778e8be357b3e9eb3f47"
+    },
+    {
+      "file": "evidence/city-day-beijing-post.json",
+      "bytes": 5666,
+      "sha256": "968032cb793912440b87f248b44edc20a4cf29f46c7720eff155f34f6f8663da"
+    },
+    {
+      "file": "evidence/city-day-beijing.error.html",
+      "bytes": 332,
+      "sha256": "5b6a8e2f06afdd2a52a5d10162dbd56f06c35115ca9e35a765fef6b5f0322602"
+    },
+    {
+      "file": "evidence/city-day-beijing.headers.txt",
+      "bytes": 290,
+      "sha256": "155684563a43f9dca61a79230fda80cab02733351dcf151042a1d964fe391ebc"
+    },
+    {
+      "file": "evidence/city-detail-beijing.headers.txt",
+      "bytes": 278,
+      "sha256": "fd22aa9e28306f4351c463777550bd5efd3a3568e79901811f5ae288e4a22970"
+    },
+    {
+      "file": "evidence/city-detail-beijing.json",
+      "bytes": 472,
+      "sha256": "abe3c1098dee88f79538860659e0e58b8070fddd614770eac2375f19917c709c"
+    },
+    {
+      "file": "evidence/city-hour-beijing-post.headers.txt",
+      "bytes": 280,
+      "sha256": "f9be48ca6d0cfd2bb7e695174ecabbbb00778ed44c75f2049fa17e212a32d050"
+    },
+    {
+      "file": "evidence/city-hour-beijing-post.json",
+      "bytes": 11391,
+      "sha256": "2969b12c98c0baea13016069d24b4effd38744787830ca612be697e4e3f6e6e6"
+    },
+    {
+      "file": "evidence/city-hour-beijing.error.html",
+      "bytes": 1876,
+      "sha256": "538b465fe43426f34fa64d49e2f4d0a48abf9cdd3b47a5353785999fd0aabb6f"
+    },
+    {
+      "file": "evidence/city-hour-beijing.headers.txt",
+      "bytes": 279,
+      "sha256": "940d571c4f3db739ba39e881bf1237f1626bfb3132aa4d603a9cd7a6e41d76e2"
+    },
+    {
+      "file": "evidence/city-stations-beijing.headers.txt",
+      "bytes": 280,
+      "sha256": "94e662c82a07e403ef4623d06ddfd3787c586f4540a1a47732f2bcd00ff30ac3"
+    },
+    {
+      "file": "evidence/city-stations-beijing.json",
+      "bytes": 18345,
+      "sha256": "e26fece2c765805bc296fc1b9b56383f4e79d241648ed7093e8c99f8226f5457"
+    },
+    {
+      "file": "evidence/history-snapshot-23h.headers.txt",
+      "bytes": 282,
+      "sha256": "60b1adf1582a84b74e25a2635a500b66f072bebe3d4ff03e7ff9dabb36be7cf9"
+    },
+    {
+      "file": "evidence/history-snapshot-23h.json",
+      "bytes": 1114711,
+      "sha256": "53de9d57f196124773c55023f2167dd9241d9073be9933ee6d2cef93fd28ca14"
+    },
+    {
+      "file": "evidence/history-snapshot-24h.headers.txt",
+      "bytes": 276,
+      "sha256": "077ad874eef5db01d8e71a20c194de0e4a07aa12a4f4b8121da1bfea3a498a7c"
+    },
+    {
+      "file": "evidence/history-snapshot-24h.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "file": "evidence/history-snapshot-48h.headers.txt",
+      "bytes": 276,
+      "sha256": "81250c9fc6cd27674dc399b066e0a1793e5544b2cf20b88cc4ef4d5b2033a749"
+    },
+    {
+      "file": "evidence/history-snapshot-48h.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "file": "evidence/history-snapshot-latest.headers.txt",
+      "bytes": 282,
+      "sha256": "913731aa89f00670dcc5816ed3aa04a1bebcbc494603eaa362770a1dd10b1671"
+    },
+    {
+      "file": "evidence/history-snapshot-latest.json",
+      "bytes": 1115712,
+      "sha256": "356fe0ddf643312b40ace893b3fb2775b0d83b1149081f432f85489b23b5f3f3"
+    },
+    {
+      "file": "evidence/history-snapshot-month.headers.txt",
+      "bytes": 276,
+      "sha256": "81250c9fc6cd27674dc399b066e0a1793e5544b2cf20b88cc4ef4d5b2033a749"
+    },
+    {
+      "file": "evidence/history-snapshot-month.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "file": "evidence/history-snapshot-year.headers.txt",
+      "bytes": 276,
+      "sha256": "9119a337a291983705cfbb409dff43c75bbb2b85496e9ad9de4d80a2ad478631"
+    },
+    {
+      "file": "evidence/history-snapshot-year.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "file": "evidence/index.headers.txt",
+      "bytes": 272,
+      "sha256": "1436ca8efe441c42fa23e3ca02b9faec5db338b0ecb300e0310d63661f007498"
+    },
+    {
+      "file": "evidence/index.html",
+      "bytes": 6060,
+      "sha256": "058dd26bd30d0363e43c9169c7400a44275b152fc8b55f63d02667aae38998e5"
+    },
+    {
+      "file": "evidence/provinces.headers.txt",
+      "bytes": 279,
+      "sha256": "0f1b09f8134ad108e74eabde87008b31be570deb24c8189073e814b448f2288d"
+    },
+    {
+      "file": "evidence/provinces.json",
+      "bytes": 2516,
+      "sha256": "141000fe6555de9ee4aa5ae90a884054fb6251e939d30a4c03635f64e70eedc5"
+    },
+    {
+      "file": "evidence/station-hour-1001A.headers.txt",
+      "bytes": 280,
+      "sha256": "2d1b1932b862eb4a27b88ae4f3339476b522c71a218ee3a0077a07da00793a7b"
+    },
+    {
+      "file": "evidence/station-hour-1001A.json",
+      "bytes": 18317,
+      "sha256": "8cc8adaccbca90b6cfbf2cf66af00ad1077a05a38238b96ab9d52ff22fcf1306"
+    },
+    {
+      "file": "evidence/station-iaqi-1001A.headers.txt",
+      "bytes": 279,
+      "sha256": "8760dae292d48c3e5f9c4455dff4ec0fcb7a4dabb2050ea76eb875e7cd36f8f6"
+    },
+    {
+      "file": "evidence/station-iaqi-1001A.json",
+      "bytes": 8712,
+      "sha256": "49c7f0bef7391ba4c2e1e51a6646078f8463b0d50b85653fc1b49f58108f3bb6"
+    },
+    {
+      "file": "evidence/stations-live-get.error.html",
+      "bytes": 1860,
+      "sha256": "92a5c277c5298aecea4135a1450035d817ddaae00510f01793722a91acb11c6a"
+    },
+    {
+      "file": "evidence/stations-live-get.headers.txt",
+      "bytes": 279,
+      "sha256": "e699d5df97267c1a9ae9a5437a391698db21da58e5940e2d17f9ac8a0a3ce9fd"
+    },
+    {
+      "file": "evidence/stations-live-post.headers.txt",
+      "bytes": 282,
+      "sha256": "104d83df64f91b791337088fccc07f25b9ab667ba0f96ad0e9939000115d1482"
+    },
+    {
+      "file": "evidence/stations-live-post.json",
+      "bytes": 1275003,
+      "sha256": "3368f858cb0edc10e59f0e1a8f9a95a319c5f9d3d014dab0294c335349c44b3d"
+    },
+    {
+      "file": "evidence/stations-live.headers.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

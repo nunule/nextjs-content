@@ -34,7 +34,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
               {/* 极简氛围衬底：极轻量CSS无任何外部图片依赖 */}
               <div className="site-ambient pointer-events-none fixed inset-0 z-0 bg-[radial-gradient(ellipse_80%_40%_at_50%_-10%,rgba(148,163,184,0.08),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_40%_at_50%_-10%,rgba(255,255,255,0.04),rgba(0,0,0,0))]" />
 
-              <div className="relative z-10 max-w-2xl mx-auto w-full py-8 sm:py-12 px-4 sm:px-6">
+              <div className="site-shell relative z-10 max-w-2xl mx-auto w-full py-8 sm:py-12 px-4 sm:px-6">
                 <header className="mb-10 sm:mb-12">
                   <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-3 md:flex-nowrap">
                     {/* 透明底雪山标志，随页面主题切换黑白。 */}

@@ -1,0 +1,107 @@
+
+
+<style>
+    .map-aqi-box {
+        display: flex;
+        width: 368px;
+        height: 24px;
+    }
+
+        .map-aqi-box > div {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            white-space: nowrap;
+            font-size: 12px;
+            font-weight: bold;
+            color: #ffffff;
+            border: 1px solid rgba(0,0,0,.4);
+            border-left: none;
+        }
+
+         /*   .map-aqi-box > div:nth-child(3), .map-aqi-box > div:last-child {
+                color: #333;
+            }*/
+
+            .map-aqi-box > div:first-child {
+                color: #333;
+                border-left: 1px solid rgba(0,0,0,.4);
+            }
+
+    .map-legend {
+        bottom: 85px;
+    }
+
+    .full-panel .left-top-panel {
+        padding: 8px;
+    }
+
+    .tdt-bottom.tdt-left {
+        left: auto;
+        right: 4px;
+        bottom: 70px;
+    }
+
+    .tdt-touch .tdt-bar, .tdt-touch .tdt-control-copyright, .tdt-touch .tdt-control-layers {
+        box-shadow: none;
+    }
+</style>
+
+<div class="left-panel full-panel">
+    <div class="left-top-panel card-panel">
+        <div id="map-container" style="width: 100%; height: 100%; z-index: 1;"></div>
+        
+        <div class="map-tab-group poll-select">
+            <div _level="Quality" _value="AQI" class="active">AQI</div>
+            <div _level="PM2_5Level" _value="PM2_5">PM<sub>2.5</sub></div>
+            <div _level="PM10Level" _value="PM10">PM<sub>10</sub></div>
+            <div _level="SO2Level" _value="SO2">SO<sub>2</sub></div>
+            <div _level="NO2Level" _value="NO2">NO<sub>2</sub></div>
+            <div _level="COLevel" _value="CO">CO</div>
+            <div _level="O3Level" _value="O3">O<sub>3</sub></div>
+        </div>
+
+        
+        <div class="map-legend">
+            <p> 点位<span class="chart-pollutant">AQI</span>实时报</p>
+            <p class="map-time"></p>
+            <div class="map-aqi-box">
+                <div class="bg-1">优</div>
+                <div class="bg-2">良</div>
+                <div class="bg-3">轻度污染</div>
+                <div class="bg-4">中度污染</div>
+                <div class="bg-5">重度污染</div>
+                <div class="bg-6">严重污染</div>
+                <div class="bg-0">无数据</div>
+            </div>
+        </div>
+
+        
+        <div class="time-slider" id="slider">
+            <div class="slider-bar">
+                <div class="progress">
+                    <div class="completed"></div>
+                    <div class="timetip">
+                        <div class="timetip-arrow"></div>
+                    </div>
+                </div>
+                <div class="amount"></div>
+            </div>
+            <div class="player">
+                <div class="heatmap_play backward" data-content="上一时刻" data-ng-class="tipleft" onclick="move(-1)"></div>
+                <div class="heatmap_play pause" data-content="暂停" data-ng-class="tiptop" style="display:none;"></div>
+                <div class="heatmap_play playing" data-content="播放" data-ng-class="tiptop"></div>
+                <div class="heatmap_play forward" data-content="下一时刻" data-ng-class="tipright" onclick="move(1)"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="/Content/Scripts/Map/TDMap3.js"></script>
+
+<script type="text/javascript">
+
+</script>

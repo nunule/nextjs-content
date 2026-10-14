@@ -3,7 +3,7 @@ import { FOUR_GRADE_COLORS, GRADE_COLORS, SOURCE_URLS } from "./constants"
 
 export type LocalizedText = Record<Locale, string>
 export type StandardId = "cn" | "us" | "eu" | "uk" | "ca" | "in" | "jp"
-export type PollutantId = "pm25" | "pm10" | "o3" | "no2" | "so2" | "co"
+export type PollutantId = "pm25" | "pm10" | "o3" | "no2" | "so2" | "co" | "nh3" | "pb"
 export type Period = "h24" | "h8" | "h1" | "m15"
 export type Population = "general" | "sensitive"
 export type Action = "usual" | "adjust" | "reschedule" | "avoid"
@@ -186,7 +186,7 @@ export const POLLUTANTS: Pollutant[] = [
     activity: bilingual("按首要污染物提示和敏感人群建议安排。", "Follow pollutant-specific and sensitive-group advice."),
     measure: bilingual("英国采用 15 分钟均值，不能直接套用小时标准。", "The UK uses 15-minute means, which are not hourly means."),
   },
-  { id: "co", symbol: "CO", name: bilingual("一氧化碳", "Carbon monoxide"), unit: "mg/m³", max: 65, initial: 4, periods: ["h24", "h1"],
+  { id: "co", symbol: "CO", name: bilingual("一氧化碳", "Carbon monoxide"), unit: "mg/m³", max: 65, initial: 4, periods: ["h24", "h8", "h1"],
     what: bilingual("无色无味、由不完全燃烧产生的气体。", "A colourless, odourless gas from incomplete combustion."),
     sources: bilingual("车辆及其他不完全燃烧排放。", "Vehicles and other incomplete combustion."),
     health: bilingual("影响血液输送氧气的能力。", "Interferes with oxygen transport in blood."),
@@ -195,6 +195,13 @@ export const POLLUTANTS: Pollutant[] = [
   },
 ]
 export const getPollutant = (id: PollutantId) => POLLUTANTS.find((pollutant) => pollutant.id === id)!
+
+export const COMPARISON_POLLUTANTS: Pick<Pollutant, "id" | "symbol" | "name" | "unit" | "max" | "initial" | "periods">[] = [
+  ...POLLUTANTS,
+  { id: "nh3", symbol: "NH₃", name: bilingual("氨 · 印度额外项目", "Ammonia · India additional pollutant"), unit: "µg/m³", max: 2000, initial: 200, periods: ["h24"] },
+  { id: "pb", symbol: "Pb", name: bilingual("铅 · 印度额外项目", "Lead · India additional pollutant"), unit: "µg/m³", max: 4, initial: 0.5, periods: ["h24"] },
+]
+export const getComparisonPollutant = (id: PollutantId) => COMPARISON_POLLUTANTS.find((pollutant) => pollutant.id === id)!
 
 export interface ConcentrationScale {
   standard: StandardId
@@ -205,6 +212,12 @@ export interface ConcentrationScale {
   gradeIndices?: number[]
   indexBreaks?: number[]
   rounding?: "ceil" | "epa"
+  nativeUnit?: "ppm" | "ppb"
+  nativeStep?: number
+  validMin?: number
+  validMax?: number
+  indexRanges?: [number, number][]
+  note?: LocalizedText
   definedMax?: number
   source: string
 }
@@ -219,7 +232,7 @@ const uk = (pollutant: PollutantId, period: Period, upper: number[], urlPollutan
 })
 const eu = (pollutant: PollutantId, upper: number[]): ConcentrationScale => ({ standard: "eu", pollutant, period: "h1", upper: [...upper, Infinity], source: SOURCE_URLS.eu })
 
-// Source tables preserve their original periods and units. No gas-unit conversion or averaging conversion is performed.
+// Gas thresholds retain native units; units.ts converts only the shared demo axis.
 export const CONCENTRATION_SCALES: ConcentrationScale[] = [
   cn("pm25", "h24", [35, 60, 115, 150, 250, 350, 500]),
   cn("pm25", "h1", [35, 60, 115, 150, 250, 350, 500]),
@@ -235,6 +248,16 @@ export const CONCENTRATION_SCALES: ConcentrationScale[] = [
   cn("co", "h1", [5, 10, 35, 60, 90, 120, 150]),
   { standard: "us", pollutant: "pm25", period: "h24", upper: [9, 35.4, 55.4, 125.4, 225.4, 325.4], indexBreaks: [0, 50, 100, 150, 200, 300, 500], rounding: "epa", source: SOURCE_URLS.us },
   { standard: "us", pollutant: "pm10", period: "h24", upper: [54, 154, 254, 354, 424, 604], indexBreaks: [0, 50, 100, 150, 200, 300, 500], rounding: "epa", source: SOURCE_URLS.us },
+  { standard: "us", pollutant: "o3", period: "h8", upper: [0.054, 0.070, 0.085, 0.105, 0.200], indexBreaks: [0, 50, 100, 150, 200, 300], rounding: "epa", nativeUnit: "ppm", nativeStep: 0.001, validMax: 0.200, source: SOURCE_URLS.us,
+    note: bilingual("8 小时表不定义 AQI≥301；超出上界需要 1 小时臭氧数据。日报使用日最大 8 小时值，实时 NowCast 另有算法。", "The 8-hour table does not define AQI ≥301; higher values require 1-hour ozone data. Daily AQI uses the daily maximum 8-hour value; NowCast has a separate algorithm.") },
+  { standard: "us", pollutant: "o3", period: "h1", upper: [0.164, 0.204, 0.404, 0.604], indexRanges: [[101, 150], [151, 200], [201, 300], [301, 500]], gradeIndices: [2, 3, 4, 5], rounding: "epa", nativeUnit: "ppm", nativeStep: 0.001, validMin: 0.125, source: SOURCE_URLS.us,
+    note: bilingual("1 小时值低于 0.125 ppm 不定义分指数，需 8 小时数据；两种时长均有效时按 EPA 规则取较高结果。", "The 1-hour sub-index is undefined below 0.125 ppm; supply 8-hour data. When both periods are valid, follow EPA's maximum-index rule.") },
+  { standard: "us", pollutant: "co", period: "h8", upper: [4.4, 9.4, 12.4, 15.4, 30.4, 50.4], indexBreaks: [0, 50, 100, 150, 200, 300, 500], rounding: "epa", nativeUnit: "ppm", nativeStep: 0.1, source: SOURCE_URLS.us },
+  { standard: "us", pollutant: "no2", period: "h1", upper: [53, 100, 360, 649, 1249, 2049], indexBreaks: [0, 50, 100, 150, 200, 300, 500], rounding: "epa", nativeUnit: "ppb", nativeStep: 1, source: SOURCE_URLS.us },
+  { standard: "us", pollutant: "so2", period: "h1", upper: [35, 75, 185, 304], indexBreaks: [0, 50, 100, 150, 200], rounding: "epa", nativeUnit: "ppb", nativeStep: 1, validMax: 304, source: SOURCE_URLS.us,
+    note: bilingual("≥305 ppb 需要 24 小时值；小时≥305 且日均<305 的特殊情况按 EPA 固定 AQI 200，不能只凭小时值推断。", "At ≥305 ppb, supply a 24-hour value. EPA fixes AQI at 200 in the special case of hourly ≥305 and daily <305; hourly data alone cannot establish that case.") },
+  { standard: "us", pollutant: "so2", period: "h24", upper: [604, 1004], indexRanges: [[201, 300], [301, 500]], gradeIndices: [4, 5], rounding: "epa", nativeUnit: "ppb", nativeStep: 1, validMin: 305, source: SOURCE_URLS.us,
+    note: bilingual("日均<305 ppb 不定义此高浓度分指数，需要 1 小时值。", "This high-concentration daily sub-index is undefined below 305 ppb; supply a 1-hour value.") },
   uk("pm25", "h24", [11, 23, 35, 41, 47, 53, 58, 64, 70], "pm25"),
   uk("pm10", "h24", [16, 33, 50, 58, 66, 75, 83, 91, 100], "pm10"),
   uk("o3", "h8", [33, 66, 100, 120, 140, 160, 187, 213, 240], "ozone"),
@@ -244,4 +267,13 @@ export const CONCENTRATION_SCALES: ConcentrationScale[] = [
   eu("o3", [60, 100, 120, 160, 180]), eu("no2", [10, 25, 60, 100, 150]), eu("so2", [20, 40, 125, 190, 275]),
   { standard: "in", pollutant: "pm25", period: "h24", upper: [30, 60, 90, 120, 250, Infinity], source: SOURCE_URLS.in },
   { standard: "in", pollutant: "pm10", period: "h24", upper: [50, 100, 250, 350, 430, Infinity], source: SOURCE_URLS.in },
+  { standard: "in", pollutant: "o3", period: "h8", upper: [50, 100, 168, 208], validMax: 208, source: SOURCE_URLS.in,
+    note: bilingual("CPCB 原表的高浓度档有小时监测脚注；8 小时图超出 208 µg/m³ 时需查看小时口径，不能继续套用高档。", "CPCB's high-concentration categories carry an hourly-monitoring footnote. Above 208 µg/m³, use the hourly basis rather than extending the 8-hour bands.") },
+  { standard: "in", pollutant: "o3", period: "h1", upper: [748, Infinity], gradeIndices: [4, 5], validMin: 209, source: SOURCE_URLS.in,
+    note: bilingual("仅展示原表高浓度臭氧的小时特殊档；较低小时值不能换算为 8 小时分级。", "Only the source's special high-concentration hourly bands are shown; lower hourly values cannot be converted to 8-hour categories.") },
+  { standard: "in", pollutant: "no2", period: "h24", upper: [40, 80, 180, 280, 400, Infinity], source: SOURCE_URLS.in },
+  { standard: "in", pollutant: "so2", period: "h24", upper: [40, 80, 380, 800, 1600, Infinity], source: SOURCE_URLS.in },
+  { standard: "in", pollutant: "co", period: "h8", upper: [1, 2, 10, 17, 34, Infinity], source: SOURCE_URLS.in },
+  { standard: "in", pollutant: "nh3", period: "h24", upper: [200, 400, 800, 1200, 1800, Infinity], source: SOURCE_URLS.in },
+  { standard: "in", pollutant: "pb", period: "h24", upper: [0.5, 1, 2, 3, 3.5, Infinity], source: SOURCE_URLS.in },
 ]

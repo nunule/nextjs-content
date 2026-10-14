@@ -18,5 +18,5 @@ export const STANDARD_OVERVIEW: Record<StandardId, StandardOverview> = {
   uk: { pollutants: FIVE_POLLUTANTS, method: bilingual("取最高等级", "Highest category"), output: bilingual("1–10 · 4 档", "1–10 · 4 bands"), pm25Period: bilingual("24 小时", "24-hour mean") },
   ca: { pollutants: ["PM", "O₃", "NO₂"], method: bilingual("联合健康风险", "Combined health risk"), output: bilingual("1–10+ · 4 档", "1–10+ · 4 bands"), pm25Period: bilingual("联合计算 / 烟雾调整", "Combined / smoke adjustment") },
   in: { pollutants: [...SIX_POLLUTANTS, "NH₃", "Pb"], method: MAX_SUB_INDEX, output: bilingual("0–500 · 6 级", "0–500 · 6 categories"), pm25Period: bilingual("24 小时", "24-hour mean") },
-  jp: { pollutants: ["PM2.5"], method: bilingual("独立注意提示", "Separate advisory"), output: bilingual("非综合 AQI", "Not an overall AQI"), pm25Period: bilingual("预计日均", "Predicted daily mean") },
+  jp: { pollutants: ["PM2.5", "SPM", "Oₓ", "NO₂", "SO₂", "CO"], method: bilingual("环境标准 / 独立指引", "Criteria / separate advisories"), output: bilingual("非综合 AQI", "Not an overall AQI"), pm25Period: bilingual("日均 / 年均 / 预计日均", "Daily / annual / predicted daily mean") },
 }

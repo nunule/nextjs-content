@@ -21,12 +21,14 @@ function loadSource(relative) {
   return module.exports
 }
 
-const { CONCENTRATION_SCALES, STANDARDS, POLLUTANTS } = loadSource("lib/environment/data.ts")
-const { compatibleScales, evaluateConcentration, concentrationSegments, thresholdLabels } = loadSource("lib/environment/calculations.ts")
+const { CONCENTRATION_SCALES, STANDARDS, POLLUTANTS, COMPARISON_POLLUTANTS } = loadSource("lib/environment/data.ts")
+const { compatibleScales, evaluateConcentration, concentrationSegments, sourceRanges, thresholdLabels } = loadSource("lib/environment/calculations.ts")
 const { environmentZh, environmentEn } = loadSource("lib/environment/messages.ts")
 const { STANDARD_OVERVIEW } = loadSource("lib/environment/standards-overview.ts")
 const { assessExercise, activityOutcomes, exerciseOfficialAdvice } = loadSource("lib/environment/exercise.ts")
 const { exerciseZh, exerciseEn } = loadSource("lib/environment/exercise-messages.ts")
+const { toDisplayConcentration, toNativeConcentration } = loadSource("lib/environment/units.ts")
+const { standardCoverage, CANADA_REFERENCES, JAPAN_REFERENCES, STANDARD_REFERENCE_NOTES } = loadSource("lib/environment/reference.ts")
 const scale = (standard, pollutant, period = "h24") => CONCENTRATION_SCALES.find((item) => item.standard === standard && item.pollutant === pollutant && item.period === period)
 
 // Source-backed boundary cases distinguish the 2026 Chinese thresholds and EPA truncation rules.
@@ -35,6 +37,8 @@ assert.equal(evaluateConcentration(scale("cn", "pm25"), 60).index, 100)
 assert.equal(evaluateConcentration(scale("cn", "pm25"), 60.1).index, 101)
 assert.equal(evaluateConcentration(scale("cn", "pm10"), 120).index, 100)
 assert.equal(evaluateConcentration(scale("cn", "pm25"), 0).index, 1)
+assert.equal(sourceRanges(scale("cn", "pm25"))[0].index, "1–50")
+assert.equal(sourceRanges(scale("cn", "pm25"))[1].index, "51–100")
 assert.equal(evaluateConcentration(scale("us", "pm25"), 9).index, 50)
 assert.equal(evaluateConcentration(scale("us", "pm25"), 9.09).index, 50)
 assert.equal(evaluateConcentration(scale("us", "pm25"), 9.1).index, 51)
@@ -60,26 +64,75 @@ assert(!compatibleScales("pm25", "h1").some((item) => item.standard === "us"))
 assert(!compatibleScales("so2", "h1").some((item) => item.standard === "uk"))
 assert.equal(compatibleScales("so2", "m15")[0].standard, "uk")
 assert(!CONCENTRATION_SCALES.some((item) => ["ca", "jp"].includes(item.standard)))
+assert.deepEqual(Array.from(compatibleScales("o3", "h8"), (item) => item.standard), ["cn", "us", "uk", "in"])
+assert.equal(COMPARISON_POLLUTANTS.length, 8)
+for (const pollutant of ["pm25", "pm10", "o3", "no2", "so2", "co", "nh3", "pb"]) assert(CONCENTRATION_SCALES.some((item) => item.standard === "in" && item.pollutant === pollutant))
+for (const pollutant of ["pm25", "pm10", "o3", "no2", "so2", "co"]) assert(CONCENTRATION_SCALES.some((item) => item.standard === "us" && item.pollutant === pollutant))
+
+// Verify against EPA's original-unit examples, not a second copy of the conversion formula.
+const ozone8 = scale("us", "o3", "h8")
+const ozone1 = scale("us", "o3", "h1")
+assert(Math.abs(toDisplayConcentration(ozone8, 0.070) - 137.4233128834356) < 1e-8)
+assert.equal(evaluateConcentration(ozone8, toDisplayConcentration(ozone8, 0.07853333)).index, 126)
+assert.equal(evaluateConcentration(ozone8, toDisplayConcentration(ozone8, 0.054999)).index, 50)
+assert.equal(evaluateConcentration(ozone8, toDisplayConcentration(ozone8, 0.055)).index, 51)
+assert.equal(evaluateConcentration(ozone8, toDisplayConcentration(ozone8, 0.201)), null)
+for (const value of [107, 108, 139, 140, 207, 208, 300]) {
+  const result = evaluateConcentration(ozone8, value)
+  const band = concentrationSegments(ozone8, 350).find((segment) => value >= segment.from && value < segment.to)
+  assert.equal(band.gradeIndex, result?.gradeIndex ?? -1, "EPA band colours must follow truncation, not raw rounded upper bounds")
+}
+assert.equal(evaluateConcentration(ozone1, toDisplayConcentration(ozone1, 0.124999)), null)
+assert.equal(evaluateConcentration(ozone1, toDisplayConcentration(ozone1, 0.125)).index, 101)
+assert.equal(evaluateConcentration(ozone1, toDisplayConcentration(ozone1, 0.164)).index, 150)
+assert.equal(evaluateConcentration(ozone1, toDisplayConcentration(ozone1, 0.604)).index, 500)
+const sulfur1 = scale("us", "so2", "h1")
+const sulfur24 = scale("us", "so2", "h24")
+assert.equal(evaluateConcentration(sulfur1, toDisplayConcentration(sulfur1, 304)).index, 200)
+assert.equal(evaluateConcentration(sulfur1, toDisplayConcentration(sulfur1, 305)), null)
+assert.equal(evaluateConcentration(sulfur24, toDisplayConcentration(sulfur24, 304)), null)
+assert.equal(evaluateConcentration(sulfur24, toDisplayConcentration(sulfur24, 305)).index, 201)
+const carbon8 = scale("us", "co", "h8")
+assert.equal(evaluateConcentration(carbon8, toDisplayConcentration(carbon8, 4.4999)).index, 50)
+assert.equal(evaluateConcentration(carbon8, toDisplayConcentration(carbon8, 4.5)).index, 51)
+assert.equal(evaluateConcentration(scale("in", "o3", "h8"), 120).gradeIndex, 2)
+assert.equal(evaluateConcentration(scale("in", "o3", "h8"), 209), null)
+assert.equal(evaluateConcentration(scale("in", "o3", "h1"), 208), null)
+assert.equal(evaluateConcentration(scale("in", "o3", "h1"), 209).gradeIndex, 4)
+assert.equal(evaluateConcentration(scale("in", "o3", "h1"), 749).gradeIndex, 5)
+assert.equal(standardCoverage("us", "o3", "h8").kind, "comparable")
+assert.equal(standardCoverage("eu", "o3", "h8").kind, "otherPeriod")
+assert.equal(standardCoverage("ca", "o3", "h8").kind, "combined")
+assert.equal(standardCoverage("jp", "o3", "h8").kind, "reference")
+assert.equal(standardCoverage("eu", "co", "h8").kind, "excluded")
+assert.equal(CANADA_REFERENCES.length, 8)
+assert.equal(JAPAN_REFERENCES.length, 9)
+assert(JAPAN_REFERENCES.some((item) => item.value.en.includes("0.07") && item.note.en.includes("2026-04-01")))
 for (const item of CONCENTRATION_SCALES) {
-  const pollutant = POLLUTANTS.find((entry) => entry.id === item.pollutant)
+  const pollutant = COMPARISON_POLLUTANTS.find((entry) => entry.id === item.pollutant)
   const standard = STANDARDS.find((entry) => entry.id === item.standard)
   const segments = concentrationSegments(item, pollutant.max)
   assert.equal(segments[0].from, 0)
   assert.equal(segments[segments.length - 1].to, pollutant.max)
   segments.forEach((segment, i) => {
     assert(segment.to > segment.from)
-    assert(standard.grades[segment.gradeIndex])
+    assert(segment.gradeIndex === -1 || standard.grades[segment.gradeIndex])
     if (i) assert.equal(segment.from, segments[i - 1].to)
   })
   for (let value = 0; value <= pollutant.max; value++) {
     const result = evaluateConcentration(item, value)
+    if (!result) {
+      const native = toNativeConcentration(item, value)
+      assert(item.validMin !== undefined && native < item.validMin || item.validMax !== undefined && native >= item.validMax)
+      continue
+    }
     assert(standard.grades[result.gradeIndex], `${item.standard}/${item.pollutant}/${value}: grade must exist`)
   }
 }
 
 // Boundary labels retain the actual values and share an axis; crowded labels wrap.
 const narrowLabels = thresholdLabels(scale("us", "pm25"), 300, 288)
-assert.deepEqual(Array.from(narrowLabels, (label) => label.value), [9, 35.4, 55.4, 125.4, 225.4])
+assert.deepEqual(Array.from(narrowLabels, (label) => Number(label.value.toFixed(1))), [9.1, 35.5, 55.5, 125.5, 225.5])
 assert(narrowLabels.some((label) => label.line > 0), "Close thresholds must occupy separate lines on mobile")
 for (const label of narrowLabels) {
   assert.equal(label.position, label.value / 300 * 100)
@@ -111,6 +164,9 @@ function checkLocalized(value) {
 checkLocalized(STANDARDS)
 checkLocalized(POLLUTANTS)
 checkLocalized(STANDARD_OVERVIEW)
+checkLocalized(STANDARD_REFERENCE_NOTES)
+checkLocalized(CANADA_REFERENCES)
+checkLocalized(JAPAN_REFERENCES)
 
 // Exercise decisions must keep averaging windows, symptom conditions and restrictions separate.
 const assessment = (options = {}) => assessExercise({ standard: "eu", period: "h1", readings: { pm25: "32" }, population: "general", symptoms: false, ...options })
